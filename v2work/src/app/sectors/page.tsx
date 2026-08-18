@@ -1,3 +1,0 @@
-import PageHero from "@/components/PageHero"; import Image from "next/image"; import Link from "next/link"; import {sectors} from "@/data/site";
-export default function Sectors(){return <><PageHero eyebrow="The Complete Home Industry" title="Exhibition Sectors" copy="Eight focused industries spanning the products, technologies and solutions shaping modern residential environments." primary="Exhibit with Us" primaryHref="/exhibit"/>
-<section className="sectorIndex">{sectors.map((s,i)=><Link href={`/sectors/${s.slug}`} key={s.slug} className="sectorIndexCard"><Image src={s.image} fill alt={s.title}/><div className="cardShade"/><span>0{i+1}</span><div><h2>{s.title}</h2><p>{s.short}</p><b>Explore sector ↗</b></div></Link>)}</section></>}
