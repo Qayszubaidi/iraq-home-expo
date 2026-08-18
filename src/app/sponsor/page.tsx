@@ -1,0 +1,62 @@
+import Link from "next/link";
+import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import { event } from "@/data/site";
+
+export const metadata = {
+  title: "Become a Sponsor | Iraq Home Expo 2027",
+  description: "Explore sponsorship opportunities at Iraq Home Expo 2027 in Baghdad.",
+};
+
+const benefits = [
+  ["01", "Brand Visibility", "Strengthen your brand presence around selected exhibition communications, visitor touchpoints and event experiences."],
+  ["02", "Industry Positioning", "Associate your company with Iraq's dedicated international exhibition for home, interiors and residential solutions."],
+  ["03", "Professional Reach", "Build visibility with buyers, distributors, designers, developers and decision-makers attending the exhibition."],
+  ["04", "Tailored Opportunities", "Discuss sponsorship opportunities with our team so your participation can reflect your objectives and market priorities."],
+];
+
+export default function SponsorPage() {
+  return <>
+    <PageHero
+      compact
+      eyebrow="Partnership Opportunities"
+      title="Become a Sponsor"
+      copy="Put your brand at the center of Iraq Home Expo 2027 and connect with the professional audience shaping Iraq's home and interiors market."
+      image="/assets/baghdad-fair-night.jpeg"
+      imageAlt="Baghdad International Fair at night"
+      primary="Discuss Sponsorship"
+      primaryHref="/register/exhibitor"
+    />
+
+    <section className="contentSplit sponsorIntro">
+      <Reveal>
+        <span className="eyebrow dark">Sponsor Iraq Home Expo</span>
+        <h2>Build visibility around a focused industry platform.</h2>
+      </Reveal>
+      <Reveal>
+        <p>Iraq Home Expo brings together manufacturers, suppliers, buyers and professionals across furniture, interiors, home textiles, kitchen, bathroom, lighting, HVAC and smart-home sectors.</p>
+        <p>Sponsorship offers participating brands an additional way to strengthen their presence around the exhibition and create meaningful visibility before and during the event.</p>
+      </Reveal>
+    </section>
+
+    <section className="sponsorBenefits">
+      {benefits.map(([number, title, copy]) => <Reveal className="sponsorBenefit" key={title}>
+        <span>{number}</span>
+        <h3>{title}</h3>
+        <p>{copy}</p>
+      </Reveal>)}
+    </section>
+
+    <section className="sponsorBand">
+      <div>
+        <span className="eyebrow light">{event.dates} · {event.venue}</span>
+        <h2>Interested in sponsoring Iraq Home Expo 2027?</h2>
+        <p>Select <strong>Sponsor</strong> or <strong>Exhibitor + Sponsor</strong> in the participation form and our team will contact you to discuss suitable opportunities.</p>
+      </div>
+      <div className="sponsorBandActions">
+        <Link className="button gold" href="/register/exhibitor">Become a Sponsor <span>→</span></Link>
+        <a className="button ghostLight" href="mailto:sales@iraqhomeexpo.com">Contact Sales <span>→</span></a>
+      </div>
+    </section>
+  </>;
+}

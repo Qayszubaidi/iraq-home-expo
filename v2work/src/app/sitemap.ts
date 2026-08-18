@@ -1,0 +1,3 @@
+import type { MetadataRoute } from "next";
+import { sectors } from "@/data/site";
+export default function sitemap():MetadataRoute.Sitemap{const base="https://iraqhomeexpo.com";const staticPaths=["","/about","/why-iraq","/sectors","/visit","/exhibit","/register","/register/visitor","/register/exhibitor","/contact","/privacy","/terms"];return [...staticPaths.map(path=>({url:base+path,lastModified:new Date(),changeFrequency:path===""?"weekly" as const:"monthly" as const,priority:path===""?1:.8})),...sectors.map(s=>({url:`${base}/sectors/${s.slug}`,lastModified:new Date(),changeFrequency:"monthly" as const,priority:.75}))]}

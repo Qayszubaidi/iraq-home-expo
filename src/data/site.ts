@@ -1,5 +1,10 @@
 export const media = {
   organizerYoutube: "https://youtube.com/@successstepsco9702?si=BoYnb_s4IRmcqGvd",
+  heroImages: {
+    networking: "/assets/industry-professionals.webp",
+    expoHall: "/assets/baghdad-fair-night.jpeg",
+    tradeShow: "/assets/expo-event.webp",
+  },
 };
 
 export const event = {
@@ -16,6 +21,7 @@ export const nav = [
   ["Sectors", "/sectors"],
   ["Visit", "/visit"],
   ["Exhibit", "/exhibit"],
+  ["Sponsor", "/sponsor"],
   ["Contact", "/contact"],
 ] as const;
 

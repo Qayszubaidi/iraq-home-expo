@@ -1,19 +1,27 @@
-# Iraq Home Expo 2027 — Fresh Website
+# Iraq Home Expo 2027
 
-Fresh, English-only Next.js build for Iraq Home Expo 2027.
+Standalone English-only Next.js website for Iraq Home Expo 2027.
+
+## Event
+- 12–15 May 2027
+- Baghdad International Fair
+- Baghdad, Iraq
+- 11:00 AM – 6:00 PM
 
 ## Stack
-- Next.js App Router + TypeScript
-- Responsive CSS design system using the Iraq Home Expo teal / gold / charcoal brand
-- Server-side Nodemailer SMTP form endpoint
-- Vercel-ready environment configuration
+- Next.js App Router
+- TypeScript
+- React
+- Next Image
+- Server-side Nodemailer form handling
+- Responsive CSS animation system
 
 ## Routes
-- `/` Home
+- `/`
 - `/about`
 - `/why-iraq`
 - `/sectors`
-- `/sectors/[slug]` — 8 dedicated sector pages
+- `/sectors/[slug]` — 8 sector detail pages
 - `/visit`
 - `/exhibit`
 - `/register`
@@ -21,30 +29,40 @@ Fresh, English-only Next.js build for Iraq Home Expo 2027.
 - `/privacy`
 - `/terms`
 
-## Current UX features
-- sticky transparent-to-teal navigation
-- white logo plate for the supplied Expo logo
-- desktop sector mega-menu
-- responsive mobile navigation
-- mobile floating registration drawer with Visitor and Exhibitor routes
-- scroll/reveal animation system and reduced-motion support
-- editorial sector rail and image mosaic/gallery
-- market-statistic presentation
-- lazy-ready organizer showreel/video components
-- visitor, exhibitor and general contact forms
-- server-side SMTP submission route
-- sitemap and robots routes
-
-## SMTP
-Copy `.env.example` to `.env.local` locally. In Vercel, add the same variables as encrypted Environment Variables. Never commit SMTP passwords to Git.
-
-The form API sends Visitor/Contact enquiries to `CONTACT_TO` and Exhibitor enquiries to `SALES_TO`.
-
-## Development
+## Local development
 ```bash
 npm install
 npm run dev
 ```
 
-## Deployment
-The intended pipeline is GitHub -> Vercel preview -> review -> production-domain cutover only after explicit approval.
+## Production build
+```bash
+npm run build
+npm start
+```
+
+## SMTP
+Copy `.env.example` to `.env.local` and replace the placeholders with the real SMTP credentials.
+
+Never commit `.env.local` or SMTP secrets.
+
+The form endpoint is `POST /api/contact`.
+
+- Visitor registration → `CONTACT_TO`
+- Exhibitor registration → `SALES_TO`
+- General contact → `CONTACT_TO`
+
+## Video placeholders
+The Success Steps YouTube channel is currently used as the organizer-video placeholder.
+Replace the channel placeholder with specific YouTube embed URLs later when individual videos are selected.
+
+## Design system
+- Deep teal `#005251`
+- Gold `#C38F2C`
+- Charcoal `#231F20`
+- Manrope for display/headings
+- DM Sans for UI/body copy
+- Sticky header with white logo plate
+- Sectors mega-menu with dropdown indicator
+- Mobile floating registration control
+- Reduced-motion accessibility support

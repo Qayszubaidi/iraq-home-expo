@@ -1,0 +1,2 @@
+import PageHero from "@/components/PageHero";
+export default function Terms(){return <><PageHero eyebrow="Legal" title="Terms & Conditions" copy="Terms governing use of the Iraq Home Expo website and online registration services."/><section className="contentSplit"><div><h2>Website terms.</h2></div><div><p>This page is reserved for final approved terms and conditions. No admission-price, payment or automatic stand-booking terms are assumed in the current website build.</p></div></section></>}

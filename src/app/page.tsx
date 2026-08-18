@@ -8,6 +8,8 @@ import SectorTicker from "@/components/SectorTicker";
 import SectorShowcase from "@/components/SectorShowcase";
 import StoryPanels from "@/components/StoryPanels";
 import StatCard from "@/components/StatCard";
+import FairShowcase from "@/components/FairShowcase";
+import OpeningCeremony from "@/components/OpeningCeremony";
 import { event, marketStats, sectors, media } from "@/data/site";
 
 export default function Home() {
@@ -42,7 +44,7 @@ export default function Home() {
               buyers across Iraq&apos;s evolving home market.
             </p>
             <div className="actions">
-              <Link className="button gold" href="/register#visitor">
+              <Link className="button gold" href="/register/visitor">
                 Visit the Expo <span aria-hidden="true">→</span>
               </Link>
               <Link className="button ghost" href="/exhibit">
@@ -142,6 +144,25 @@ export default function Home() {
 
       <StoryPanels />
 
+      <FairShowcase />
+
+      <OpeningCeremony />
+
+
+      <section className="homeSponsor">
+        <Reveal className="homeSponsorCopy">
+          <span className="eyebrow light">Partnership Opportunities</span>
+          <h2>Put your brand at the center of Iraq Home Expo.</h2>
+          <p>Extend your presence beyond the stand. Sponsorship opportunities give participating brands additional visibility around the exhibition and its professional audience.</p>
+          <div className="actions">
+            <Link className="button gold" href="/sponsor">Become a Sponsor <span aria-hidden="true">→</span></Link>
+            <Link className="button ghostLight" href="/register/exhibitor">Register Interest <span aria-hidden="true">→</span></Link>
+          </div>
+        </Reveal>
+        <div className="homeSponsorGraphic" aria-hidden="true"><span>PARTNER</span><strong>WITH IRAQ
+HOME EXPO</strong><i /></div>
+      </section>
+
       <VideoFeature
         title="Experience the work behind the exhibition"
         copy="Watch organizer achievements and previous exhibition work. This panel currently links to the Success Steps YouTube channel and is ready for a specific showreel embed when you provide it."
@@ -158,11 +179,14 @@ export default function Home() {
           </div>
         </div>
         <div className="finalCtaActions">
-          <Link className="button gold" href="/register#visitor">
+          <Link className="button gold" href="/register/visitor">
             Register to Visit <span aria-hidden="true">→</span>
           </Link>
-          <Link className="button ghostLight" href="/register#exhibitor">
+          <Link className="button ghostLight" href="/register/exhibitor">
             Exhibit with Us <span aria-hidden="true">→</span>
+          </Link>
+          <Link className="button ghostLight sponsorCta" href="/sponsor">
+            Become a Sponsor <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
