@@ -3503,7 +3503,7 @@ p {
 .modernPageHero.compact .modernPageHeroMedia{min-height:450px!important}
 .modernPageHeroMedia img{
   object-fit:cover!important;
-  object-position:center center!important;
+  object-position:var(--hero-object-position, center center)!important;
   transform:scale(1.001);
 }
 .modernPageHeroMediaShade{

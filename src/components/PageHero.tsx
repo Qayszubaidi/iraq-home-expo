@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
 export default function PageHero({
   eyebrow,
@@ -33,8 +34,8 @@ export default function PageHero({
             {primary}<span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="modernPageHeroMedia">
-          <Image src={image} fill priority alt={imageAlt} sizes="(max-width: 900px) 100vw, 58vw" style={{ objectPosition: imagePosition }} />
+        <div className="modernPageHeroMedia" style={{ "--hero-object-position": imagePosition } as CSSProperties}>
+          <Image src={image} fill priority alt={imageAlt} sizes="(max-width: 900px) 100vw, 58vw" />
           <div className="modernPageHeroMediaShade" aria-hidden="true" />
           <div className="modernPageHeroArch" aria-hidden="true" />
           <span className="modernPageHeroIndex" aria-hidden="true">Iraq Home Expo · 2027</span>
