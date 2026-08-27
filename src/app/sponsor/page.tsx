@@ -24,6 +24,7 @@ export default function SponsorPage() {
       copy="Put your brand at the center of Iraq Home Expo 2027 and connect with the professional audience shaping Iraq's home and interiors market."
       image="/assets/hero-sponsor-business.webp"
       imageAlt="Contemporary business meeting environment"
+      imagePosition="bottom center"
       primary="Discuss Sponsorship"
       primaryHref="/register/exhibitor"
     />

@@ -10,6 +10,7 @@ export default function PageHero({
   primary = "Register",
   primaryHref = "/register",
   compact = false,
+  imagePosition = "center center",
 }: {
   eyebrow: string;
   title: string;
@@ -19,6 +20,7 @@ export default function PageHero({
   primary?: string;
   primaryHref?: string;
   compact?: boolean;
+  imagePosition?: string;
 }) {
   return (
     <section className={`modernPageHero ${compact ? "compact" : ""}`}>
@@ -32,7 +34,7 @@ export default function PageHero({
           </Link>
         </div>
         <div className="modernPageHeroMedia">
-          <Image src={image} fill priority alt={imageAlt} sizes="(max-width: 900px) 100vw, 58vw" />
+          <Image src={image} fill priority alt={imageAlt} sizes="(max-width: 900px) 100vw, 58vw" style={{ objectPosition: imagePosition }} />
           <div className="modernPageHeroMediaShade" aria-hidden="true" />
           <div className="modernPageHeroArch" aria-hidden="true" />
           <span className="modernPageHeroIndex" aria-hidden="true">Iraq Home Expo · 2027</span>
