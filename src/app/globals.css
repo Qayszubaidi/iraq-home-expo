@@ -3826,3 +3826,16 @@ p {
   .contactGrid{grid-template-columns:1fr!important}
   .v4FooterLogo{width:250px!important;height:78px!important}
 }
+
+
+/* Contact details — consistent compact typography across email, phone and venue. */
+.contactGrid a,
+.contactGrid strong{
+  font-size:clamp(16px,1.2vw,19px)!important;
+  letter-spacing:-.015em;
+}
+@media (min-width: 1101px){
+  .contactGrid a,
+  .contactGrid strong{white-space:nowrap;}
+  .contactGrid>div:last-child strong{white-space:normal;}
+}

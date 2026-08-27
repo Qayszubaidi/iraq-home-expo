@@ -31,11 +31,6 @@ export const metadata: Metadata = {
     type: "website",
     images: ["/assets/hero-interior.webp"],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Iraq Home Expo 2027",
-    description: "12–15 May 2027 · Baghdad International Fair",
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

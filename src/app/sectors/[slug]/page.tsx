@@ -7,7 +7,7 @@ import SectorGallery from "@/components/SectorGallery";
 import {sectors} from "@/data/site";
 export function generateStaticParams(){return sectors.map(s=>({slug:s.slug}))}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const s=sectors.find(x=>x.slug===slug);return {title:s?.title||"Exhibition Sector",description:s?.short}}
-export default async function SectorPage({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const s=sectors.find(x=>x.slug===slug);if(!s)notFound();const related=sectors.filter(x=>x.slug!==s.slug).slice(0,3);return <><PageHero eyebrow="Exhibition Sector" title={s.title} copy={s.short} image={s.image} imageAlt={`${s.title} products and solutions`} primary="Register as an Exhibitor" primaryHref="/register/exhibitor"/>
+export default async function SectorPage({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const s=sectors.find(x=>x.slug===slug);if(!s)notFound();const related=sectors.filter(x=>x.slug!==s.slug).slice(0,3);return <><PageHero eyebrow="Exhibition Sector" title={s.title} copy={s.short} image={s.heroImage ?? s.image} imageAlt={`${s.title} products and solutions`} primary="Register as an Exhibitor" primaryHref="/register/exhibitor"/>
 <section className="sectorDetail"><div><span className="eyebrow dark">Product Categories</span><h2>Explore {s.title}</h2><p>Discover products, systems and solutions represented within this sector at Iraq Home Expo 2027.</p></div><div className="categoryGrid">{s.categories.map((c,i)=><div className="category" key={c}><span>{String(i+1).padStart(2,"0")}</span><h3>{c}</h3></div>)}</div></section>
 <SectorGallery slug={s.slug} title={s.title}/>
 <SectorMoodboard title={s.title} image={s.image}/>

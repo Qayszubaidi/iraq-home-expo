@@ -7,7 +7,3 @@ out
 *.log
 
 *.tsbuildinfo
-
-# Local design/build archives
-*.zip
-v2work/

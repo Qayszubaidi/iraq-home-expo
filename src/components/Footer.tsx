@@ -10,7 +10,7 @@ export default function Footer(){return <footer className="v4Footer">
     <section className="v4FooterBrand">
       <Link href="/" className="v4FooterLogo"><Image src="/assets/iraq-home-expo-logo-white.png" width={309} height={90} alt="Iraq Home Expo"/></Link>
       <p>Iraq Home Expo brings the home, interiors and residential industry together in Baghdad.</p>
-      <div className="v4FooterSocial"><a href="#" aria-label="Facebook"><Social kind="facebook"/></a><a href="#" aria-label="Instagram"><Social kind="instagram"/></a></div>
+      <div className="v4FooterSocial"><a href="https://www.facebook.com/profile.php?id=61591852047921" target="_blank" rel="noreferrer" aria-label="Facebook"><Social kind="facebook"/></a><a href="https://www.instagram.com/iraqhomeexpo/" target="_blank" rel="noreferrer" aria-label="Instagram"><Social kind="instagram"/></a></div>
     </section>
     <section className="v4FooterCol"><h3>Quick Links</h3><Link href="/about">About</Link><Link href="/why-iraq">Why Iraq</Link><Link href="/visit">Visit</Link><Link href="/exhibit">Exhibit</Link><Link href="/sponsor">Sponsor</Link><Link href="/contact">Contact</Link></section>
     <section className="v4FooterCol"><h3>Exhibition Sectors</h3>{sectors.slice(0,6).map(s=><Link href={`/sectors/${s.slug}`} key={s.slug}>{s.title}</Link>)}</section>

@@ -26,7 +26,7 @@ export default function Header(){
         <div className="v4UtilityInfo">
           <span>{event.venue}</span><i/><span>{event.dates}</span><i/><a href="mailto:info@iraqhomeexpo.com">info@iraqhomeexpo.com</a>
         </div>
-        <div className="v4UtilitySocial"><a href="#" aria-label="Facebook"><SocialIcon type="facebook"/></a><a href="#" aria-label="Instagram"><SocialIcon type="instagram"/></a></div>
+        <div className="v4UtilitySocial"><a href="https://www.facebook.com/profile.php?id=61591852047921" target="_blank" rel="noreferrer" aria-label="Facebook"><SocialIcon type="facebook"/></a><a href="https://www.instagram.com/iraqhomeexpo/" target="_blank" rel="noreferrer" aria-label="Instagram"><SocialIcon type="instagram"/></a></div>
       </div>
     </div>
     <header className={`v4Header ${scrolled?"isScrolled":""}`}>
