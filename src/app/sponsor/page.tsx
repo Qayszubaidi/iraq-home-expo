@@ -22,8 +22,8 @@ export default function SponsorPage() {
       eyebrow="Partnership Opportunities"
       title="Become a Sponsor"
       copy="Put your brand at the center of Iraq Home Expo 2027 and connect with the professional audience shaping Iraq's home and interiors market."
-      image="/assets/baghdad-fair-night.jpeg"
-      imageAlt="Baghdad International Fair at night"
+      image="/assets/hero-sponsor-business.webp"
+      imageAlt="Contemporary business meeting environment"
       primary="Discuss Sponsorship"
       primaryHref="/register/exhibitor"
     />

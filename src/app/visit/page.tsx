@@ -6,7 +6,7 @@ import OpeningCeremony from "@/components/OpeningCeremony";
 import Link from "next/link";
 import {event,sectors,media} from "@/data/site";
 export const metadata={title:"Visit Iraq Home Expo"};
-export default function Visit(){return <><PageHero eyebrow="Visitor Information" title="Visit Iraq Home Expo 2027" copy="Discover products, meet suppliers and connect with companies serving Iraq’s home, interiors and residential markets." image="/assets/baghdad-fair-night.jpeg" imageAlt="Baghdad International Fair illuminated at night" primary="Register to Visit" primaryHref="/register/visitor"/>
+export default function Visit(){return <><PageHero eyebrow="Visitor Information" title="Visit Iraq Home Expo 2027" copy="Discover products, meet suppliers and connect with companies serving Iraq’s home, interiors and residential markets." image="/assets/hero-visit-baghdad-fair.webp" imageAlt="Baghdad International Fair and surrounding exhibition grounds in Baghdad" primary="Register to Visit" primaryHref="/register/visitor"/>
 <OpeningCeremony compact/>
 <section className="infoTriplet">{[["Date",event.dates],["Opening Hours",event.hours],["Venue",`${event.venue} · ${event.city}`]].map(([a,b])=><div key={a}><span>{a}</span><strong>{b}</strong></div>)}</section>
 <FairShowcase compact/>
