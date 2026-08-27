@@ -1,11 +1,18 @@
 import Image from "next/image";
+import { sectors } from "@/data/site";
 
-export default function SectorMoodboard({title,image}:{title:string;image:string}){
+export default function SectorMoodboard({title,slug}:{title:string;slug:string}){
+  const index = sectors.findIndex((sector) => sector.slug === slug);
+  const current = sectors[index];
+  const next = sectors[(index + 1) % sectors.length];
+  const nextTwo = sectors[(index + 2) % sectors.length];
+
   const tiles=[
-    {image,label:`${title} focus`,className:"moodMain"},
-    {image:"/assets/hero-interior.webp",label:"Interior context",className:"moodSide"},
-    {image:"/assets/expo-event.webp",label:"Exhibition experience",className:"moodSide"},
+    {image:current.image,label:`${title} focus`,className:"moodMain"},
+    {image:next.image,label:next.title,className:"moodSide"},
+    {image:nextTwo.image,label:nextTwo.title,className:"moodSide"},
   ];
+
   return <section className="sectorMoodboard">
     <div className="moodIntro">
       <span className="eyebrow dark">Products · spaces · business</span>

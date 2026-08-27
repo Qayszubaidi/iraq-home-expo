@@ -5,8 +5,8 @@ import Reveal from "@/components/Reveal";
 const panels = [
   {
     href: "/sectors",
-    image: "/assets/furniture.webp",
-    alt: "Products and suppliers",
+    image: "/assets/sector-card-furniture.webp",
+    alt: "Furniture and home furnishing products",
     tag: "Discover",
     title: "Discover Products & Suppliers",
     copy: "Browse furniture, interiors, kitchen, lighting and home systems from international exhibitors.",
@@ -14,8 +14,8 @@ const panels = [
   },
   {
     href: "/visit",
-    image: "/assets/industry-professionals.webp",
-    alt: "Industry professionals networking",
+    image: "/assets/expo-networking-generated.png",
+    alt: "Professional visitors and exhibitors inside a home and interiors exhibition",
     tag: "Connect",
     title: "Meet Buyers & Industry Professionals",
     copy: "Connect with architects, developers, distributors and decision-makers across Iraq's home market.",
@@ -23,8 +23,8 @@ const panels = [
   },
   {
     href: "/exhibit",
-    image: "/assets/build-partnerships.webp",
-    alt: "Business partnership",
+    image: "/assets/sector-card-digital.webp",
+    alt: "Contemporary professional interior and business environment",
     tag: "Partner",
     title: "Build Partnerships in Iraq",
     copy: "Present your company to professionals actively sourcing products and solutions in Baghdad.",

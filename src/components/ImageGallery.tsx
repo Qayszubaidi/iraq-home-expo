@@ -3,11 +3,11 @@ import Link from "next/link";
 import Reveal from "@/components/Reveal";
 
 const items = [
-  ["/assets/interiors.webp", "Interiors", "/sectors/interiors"],
-  ["/assets/furniture.webp", "Furniture", "/sectors/furniture-home-furnishings"],
-  ["/assets/kitchen.webp", "Kitchen", "/sectors/kitchen"],
-  ["/assets/home-textiles.webp", "Home Textiles", "/sectors/home-textiles"],
-  ["/assets/lighting-electrical.webp", "Lighting & Electrical", "/sectors/home-lighting-electrical"],
+  ["/assets/sector-card-interiors.webp", "Interiors", "/sectors/interiors"],
+  ["/assets/sector-card-furniture.webp", "Furniture", "/sectors/furniture-home-furnishings"],
+  ["/assets/sector-card-kitchen.webp", "Kitchen", "/sectors/kitchen"],
+  ["/assets/sector-card-textiles.webp", "Home Textiles", "/sectors/home-textiles"],
+  ["/assets/sector-card-lighting.webp", "Lighting & Electrical", "/sectors/home-lighting-electrical"],
 ] as const;
 
 export default function ImageGallery() {
