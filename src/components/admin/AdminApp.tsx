@@ -26,11 +26,80 @@ export default function AdminApp(){
  const router=useRouter(); const [tab,setTab]=useState<Tab>("overview"); const [ready,setReady]=useState(false); const [notice,setNotice]=useState("");
  useEffect(()=>{if(!getSession()) router.replace("/admin/login"); else setReady(true)},[router]);
  if(!ready)return <div className="adminLoading">Checking admin session…</div>;
- const nav:[Tab,string][]=[["overview","Dashboard"],["pages","Pages"],["sectors","Sectors"],["media","Media Library"],["settings","Site Settings"],["forms","Forms"]];
- return <div className="adminShell"><aside className="adminSidebar"><div className="adminBrand"><strong>Iraq Home Expo</strong><span>Website Control</span></div><nav>{nav.map(([k,l])=><button key={k} className={tab===k?"active":""} onClick={()=>{setTab(k);setNotice("")}}>{l}</button>)}</nav><a className="adminViewSite" href="/" target="_blank">View website ↗</a><button className="adminSignout" onClick={()=>{signOut();router.replace('/admin/login')}}>Sign out</button></aside><main className="adminMain">{notice&&<div className="adminNotice">{notice}</div>}{tab==="overview"&&<Overview/>}{tab==="pages"&&<PagesEditor onNotice={setNotice}/>} {tab==="sectors"&&<SectorsEditor onNotice={setNotice}/>} {tab==="media"&&<MediaLibrary onNotice={setNotice}/>} {tab==="settings"&&<SettingsEditor onNotice={setNotice}/>} {tab==="forms"&&<FormsEditor onNotice={setNotice}/>}</main></div>
+ const nav:[Tab,string,string][]=[
+   ["overview","Dashboard","01"],
+   ["pages","Pages","02"],
+   ["sectors","Sectors","03"],
+   ["media","Media Library","04"],
+   ["settings","Site Settings","05"],
+   ["forms","Forms","06"]
+ ];
+ const activeLabel=nav.find(([k])=>k===tab)?.[1]||"Dashboard";
+ return <div className="adminShell">
+   <aside className="adminSidebar">
+     <div className="adminBrand">
+       <div className="adminBrandMark">IH</div>
+       <div><strong>Iraq Home Expo</strong><span>Content Management</span></div>
+     </div>
+     <div className="adminNavLabel">Workspace</div>
+     <nav>{nav.map(([k,l,n])=><button key={k} className={tab===k?"active":""} onClick={()=>{setTab(k);setNotice("")}}><span className="adminNavNumber">{n}</span><span>{l}</span></button>)}</nav>
+     <div className="adminSidebarFooter">
+       <a className="adminViewSite" href="/" target="_blank"><span>View website</span><b>↗</b></a>
+       <button className="adminSignout" onClick={()=>{signOut();router.replace('/admin/login')}}>Sign out</button>
+     </div>
+   </aside>
+   <main className="adminMain">
+     <header className="adminWorkspaceHeader">
+       <div><span>Private CMS</span><strong>{activeLabel}</strong></div>
+       <div className="adminWorkspaceStatus"><i></i> Connected</div>
+     </header>
+     <div className="adminContent">
+       {notice&&<div className="adminNotice">{notice}</div>}
+       {tab==="overview"&&<Overview onNavigate={setTab}/>}
+       {tab==="pages"&&<PagesEditor onNotice={setNotice}/>}
+       {tab==="sectors"&&<SectorsEditor onNotice={setNotice}/>}
+       {tab==="media"&&<MediaLibrary onNotice={setNotice}/>}
+       {tab==="settings"&&<SettingsEditor onNotice={setNotice}/>}
+       {tab==="forms"&&<FormsEditor onNotice={setNotice}/>}
+     </div>
+   </main>
+ </div>
 }
 
-function Overview(){return <><div className="adminTop"><div><span>Private CMS</span><h1>Website dashboard</h1><p>Update website content and images without editing the design layer or pushing a Git commit.</p></div></div><div className="adminMetricGrid"><div><strong>9</strong><span>Editable page heroes</span></div><div><strong>8</strong><span>Editable sectors</span></div><div><strong>Draft → Publish</strong><span>Controlled publishing workflow</span></div><div><strong>Locked</strong><span>Layout and CSS stay in code</span></div></div><section className="adminInfo"><h2>Safe editing model</h2><p>Draft changes remain private until you press Publish. The public website falls back to its existing hard-coded content if Supabase is unavailable, so the CMS cannot take the site down by itself.</p></section></>}
+function Overview({onNavigate}:{onNavigate:(t:Tab)=>void}){return <>
+  <div className="adminHero">
+    <div>
+      <span className="adminEyebrow">Iraq Home Expo 2027</span>
+      <h1>Website dashboard</h1>
+      <p>Manage approved content, sector information, imagery and site settings without touching the design code.</p>
+    </div>
+    <button className="adminPrimaryAction" onClick={()=>onNavigate("pages")}>Edit website content <span>→</span></button>
+  </div>
+
+  <div className="adminMetricGrid">
+    <button onClick={()=>onNavigate("pages")}><span className="metricIndex">01</span><strong>9</strong><span>Editable pages</span><small>Hero copy, images and SEO</small></button>
+    <button onClick={()=>onNavigate("sectors")}><span className="metricIndex">02</span><strong>8</strong><span>Exhibition sectors</span><small>Cards, heroes and categories</small></button>
+    <button onClick={()=>onNavigate("media")}><span className="metricIndex">03</span><strong>Media</strong><span>Asset library</span><small>Upload and reuse site imagery</small></button>
+    <button onClick={()=>onNavigate("settings")}><span className="metricIndex">04</span><strong>Global</strong><span>Site settings</span><small>Event, contacts and socials</small></button>
+  </div>
+
+  <div className="adminOverviewGrid">
+    <section className="adminInfo">
+      <div className="adminSectionHeading"><span>Publishing</span><h2>Safe editing workflow</h2></div>
+      <div className="adminWorkflow">
+        <div><b>1</b><span><strong>Edit</strong><small>Change content or imagery in the relevant section.</small></span></div>
+        <div><b>2</b><span><strong>Save draft</strong><small>Keep changes private while you review them.</small></span></div>
+        <div><b>3</b><span><strong>Publish</strong><small>Send approved content to the public website.</small></span></div>
+      </div>
+    </section>
+    <aside className="adminGuardrail">
+      <span>Design protection</span>
+      <h3>Layout stays locked.</h3>
+      <p>The dashboard edits content only. Navigation, spacing, CSS and responsive layout remain protected in the codebase.</p>
+      <div><i></i> Code fallback enabled</div>
+    </aside>
+  </div>
+</>}
 
 function PagesEditor({onNotice}:{onNotice:(s:string)=>void}){
  const [key,setKey]=useState("home"), [form,setForm]=useState<Json>(emptyPage), [loading,setLoading]=useState(false), [published,setPublished]=useState<Json|null>(null);
