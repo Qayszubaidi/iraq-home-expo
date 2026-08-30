@@ -3891,7 +3891,7 @@ p {
 @media(max-width:560px){.adminSidebar nav{grid-template-columns:1fr 1fr}.adminMetricGrid,.adminMediaGrid{grid-template-columns:1fr}.adminWorkflow{grid-template-columns:1fr}.adminWorkspaceStatus{display:none}.adminContent{padding:20px 16px}.adminHero h1,.adminTop h1{font-size:38px}.adminOverviewGrid{grid-template-columns:1fr}}
 
 /* Hide public site chrome inside the private admin experience */
-body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.adminShell) .v4MobileOverlay,body:has(.adminShell) .floatingDock,body:has(.adminShell) .v4Footer,body:has(.adminLoginPage) .v4Utility,body:has(.adminLoginPage) .v4Header,body:has(.adminLoginPage) .v4MobileOverlay,body:has(.adminLoginPage) .floatingDock,body:has(.adminLoginPage) .v4Footer{display:none!important}body:has(.adminShell) main,body:has(.adminLoginPage) main{margin:0!important;padding:0!important}
+body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.adminShell) .v4MobileOverlay,body:has(.adminShell) .floatingDock,body:has(.adminShell) .v4Footer,body:has(.adminLoginPage) .v4Utility,body:has(.adminLoginPage) .v4Header,body:has(.adminLoginPage) .v4MobileOverlay,body:has(.adminLoginPage) .floatingDock,body:has(.adminLoginPage) .v4Footer{display:none!important}body:has(.adminShell)>main,body:has(.adminLoginPage)>main{margin:0!important;padding:0!important}
 
 
 /* Admin desktop sidebar — fixed to the full viewport while content scrolls */
@@ -3921,4 +3921,23 @@ body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.admin
 @media (min-width:821px) and (max-width:1100px){
   .adminSidebar{width:238px}
   .adminMain{margin-left:238px}
+}
+
+/* Admin fixed-sidebar content offset — keep workspace fully clear of the sidebar */
+@media (min-width:821px){
+  body:has(.adminShell) .adminMain{
+    margin-left:286px!important;
+    padding:0!important;
+    width:calc(100% - 286px)!important;
+    box-sizing:border-box;
+    overflow-x:hidden;
+  }
+  body:has(.adminShell) .adminWorkspaceHeader,
+  body:has(.adminShell) .adminContent{
+    box-sizing:border-box;
+    max-width:100%;
+  }
+}
+@media (min-width:821px) and (max-width:1100px){
+  body:has(.adminShell) .adminMain{margin-left:238px!important;width:calc(100% - 238px)!important}
 }

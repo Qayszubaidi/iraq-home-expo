@@ -80,6 +80,19 @@ const pageFallbacks: Record<string, Json> = {
 };
 
 function pageDefaults(key:string){ return {...emptyPage,...(pageFallbacks[key]||{})}; }
+function mergeCmsContent(defaults:Json,...layers:(Json|undefined|null)[]){
+  const out={...defaults};
+  for(const layer of layers){
+    if(!layer) continue;
+    for(const [k,v] of Object.entries(layer)){
+      if(v===undefined||v===null) continue;
+      if(typeof v==="string" && v.trim()==="") continue;
+      if(Array.isArray(v) && v.length===0) continue;
+      out[k]=v;
+    }
+  }
+  return out;
+}
 function sectorDefaults(slug:string){
   const s=codeSectors.find(x=>x.slug===slug);
   return s ? {...emptySector,title:s.title,short:s.short,image:s.image,heroImage:s.heroImage||s.image,categories:[...s.categories]} : {...emptySector};
@@ -184,8 +197,8 @@ function PagesEditor({onNotice}:{onNotice:(s:string)=>void}){
    try{
      const [draft,pub]=await Promise.all([getDraft("cms_page_drafts","key",k),getDraft("cms_pages","key",k)]);
      const fallback=pageDefaults(k);
-     setForm({...fallback,...(pub?.content||{}),...(draft?.content||{})});
-     setPublished(pub?.content ? {...fallback,...pub.content} : null);
+     setForm(mergeCmsContent(fallback,pub?.content,draft?.content));
+     setPublished(pub?.content ? mergeCmsContent(fallback,pub.content) : null);
      try{setHistory(await adminRest<any[]>(`cms_page_revisions?key=eq.${encodeURIComponent(k)}&select=*&order=created_at.desc&limit=12`))}catch{setHistory([])}
    }catch(e:any){onNotice(e.message)}finally{setLoading(false)}
  }
@@ -206,13 +219,13 @@ function PagesEditor({onNotice}:{onNotice:(s:string)=>void}){
    }catch(e:any){onNotice(e.message)}
  }
  function restoreDefaults(){setForm(pageDefaults(key));onNotice(`${label} fields restored to the website's code defaults. Save as draft or Publish to apply.`)}
- function restoreRevision(row:any){setForm({...pageDefaults(key),...(row.content||{})});setShowHistory(false);onNotice(`Previous ${label} version loaded into the editor. It is not public until you Publish.`)}
+ function restoreRevision(row:any){setForm(mergeCmsContent(pageDefaults(key),row.content));setShowHistory(false);onNotice(`Previous ${label} version loaded into the editor. It is not public until you Publish.`)}
  return <><div className="adminTop"><div><span>Content</span><h1>Page editor</h1><p>Current website values are pre-filled. Edit safely, save a draft, and publish only when approved.</p></div><select value={key} onChange={e=>setKey(e.target.value)}>{pageDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<div className="adminEditorGrid"><section className="adminCard"><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,flexWrap:"wrap"}}><h2 style={{marginBottom:0}}>{label} hero</h2><div style={{display:"flex",gap:8}}><button type="button" className="adminUpload" style={{background:"#fff",color:"#075453"}} onClick={()=>setShowHistory(v=>!v)}>History</button><button type="button" className="adminUpload" style={{background:"#fff",color:"#075453"}} onClick={restoreDefaults}>Restore website defaults</button></div></div>{showHistory&&<div style={{margin:"18px 0",padding:16,border:"1px solid #ded7cc",borderRadius:7,background:"#f8f5ef"}}><strong style={{display:"block",fontSize:12,marginBottom:10}}>Previously published versions</strong>{history.length===0?<p style={{fontSize:12,color:"#766f68",margin:0}}>No earlier version has been stored yet. Version history begins with the next publish.</p>:<div style={{display:"grid",gap:8}}>{history.map(row=><button type="button" key={row.id} onClick={()=>restoreRevision(row)} style={{border:"1px solid #ddd4c7",background:"#fff",padding:"10px 12px",textAlign:"left",cursor:"pointer",borderRadius:5}}><b style={{display:"block",fontSize:11}}>{row.content?.title||label}</b><span style={{fontSize:10,color:"#7d756d"}}>{new Date(row.created_at).toLocaleString()}</span></button>)}</div>}</div>}<div style={{marginTop:20}}><Field label="Eyebrow" value={form.eyebrow} onChange={v=>set("eyebrow",v)}/><Field label="Title" value={form.title} onChange={v=>set("title",v)}/><Field label="Description" multiline value={form.copy} onChange={v=>set("copy",v)}/><Field label="Hero image URL" value={form.heroImage} onChange={v=>set("heroImage",v)} placeholder="/assets/image.webp or media URL"/><Field label="Image alt text" value={form.heroAlt} onChange={v=>set("heroAlt",v)}/><Field label="Image position" value={form.heroPosition} onChange={v=>set("heroPosition",v)} placeholder="center center / bottom center"/><div className="adminTwo"><Field label="CTA label" value={form.primary} onChange={v=>set("primary",v)}/><Field label="CTA link" value={form.primaryHref} onChange={v=>set("primaryHref",v)}/></div><h3>SEO</h3><Field label="SEO title" value={form.seoTitle} onChange={v=>set("seoTitle",v)}/><Field label="SEO description" multiline value={form.seoDescription} onChange={v=>set("seoDescription",v)}/><div className="adminActions"><button onClick={save}>Save Draft</button><button className="primary" onClick={publish}>Publish</button></div></div></section><aside className="adminPreview"><span>Status</span><strong>{published?"Published CMS content":"Using website defaults"}</strong><p>Hero image</p>{form.heroImage?<img src={form.heroImage} alt="Preview"/>:<div className="adminEmptyPreview">Choose an image from Media Library and paste its URL here.</div>}</aside></div>}</>
 }
 
 function SectorsEditor({onNotice}:{onNotice:(s:string)=>void}){
  const [slug,setSlug]=useState("interiors"),[form,setForm]=useState<Json>(sectorDefaults("interiors")),[loading,setLoading]=useState(false); const label=sectorDefinitions.find(x=>x[0]===slug)?.[1]||slug;
- async function load(){setLoading(true);try{const [draft,pub]=await Promise.all([getDraft("cms_sector_drafts","slug",slug),getDraft("cms_sectors","slug",slug)]);const fallback=sectorDefaults(slug);const c={...(pub?.content||{}),...(draft?.content||{})};setForm({...fallback,...c,categories:Array.isArray(c.categories)?c.categories:fallback.categories})}catch(e:any){onNotice(e.message)}finally{setLoading(false)}}
+ async function load(){setLoading(true);try{const [draft,pub]=await Promise.all([getDraft("cms_sector_drafts","slug",slug),getDraft("cms_sectors","slug",slug)]);const fallback=sectorDefaults(slug);const c=mergeCmsContent(fallback,pub?.content,draft?.content);setForm({...c,categories:Array.isArray(c.categories)&&c.categories.length?c.categories:fallback.categories})}catch(e:any){onNotice(e.message)}finally{setLoading(false)}}
  useEffect(()=>{load()},[slug]); const set=(k:string,v:any)=>setForm((f:Json)=>({...f,[k]:v}));
  async function save(publish=false){try{await saveRow("cms_sector_drafts","slug",slug,label,{content:form});if(publish)await saveRow("cms_sectors","slug",slug,label,{content:form});onNotice(`${label} ${publish?"published":"draft saved"}.`)}catch(e:any){onNotice(e.message)}}
  return <><div className="adminTop"><div><span>Exhibition</span><h1>Sector editor</h1><p>Control card images, sector hero images and sector copy.</p></div><select value={slug} onChange={e=>setSlug(e.target.value)}>{sectorDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<section className="adminCard wide"><Field label="Sector title" value={form.title} onChange={v=>set("title",v)}/><Field label="Short description" multiline value={form.short} onChange={v=>set("short",v)}/><div className="adminTwo"><Field label="Card cover image URL" value={form.image} onChange={v=>set("image",v)}/><Field label="Hero image URL" value={form.heroImage} onChange={v=>set("heroImage",v)}/></div><Field label="Product categories — one per line" multiline value={(form.categories||[]).join("\n")} onChange={v=>set("categories",v.split("\n").map((x:string)=>x.trim()).filter(Boolean))}/><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section>}</>
