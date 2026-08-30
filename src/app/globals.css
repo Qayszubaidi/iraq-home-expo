@@ -3892,3 +3892,33 @@ p {
 
 /* Hide public site chrome inside the private admin experience */
 body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.adminShell) .v4MobileOverlay,body:has(.adminShell) .floatingDock,body:has(.adminShell) .v4Footer,body:has(.adminLoginPage) .v4Utility,body:has(.adminLoginPage) .v4Header,body:has(.adminLoginPage) .v4MobileOverlay,body:has(.adminLoginPage) .floatingDock,body:has(.adminLoginPage) .v4Footer{display:none!important}body:has(.adminShell) main,body:has(.adminLoginPage) main{margin:0!important;padding:0!important}
+
+
+/* Admin desktop sidebar — fixed to the full viewport while content scrolls */
+@media (min-width:821px){
+  .adminShell{
+    display:block;
+    min-height:100vh;
+  }
+  .adminSidebar{
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    width:286px;
+    height:100dvh;
+    min-height:100vh;
+    box-sizing:border-box;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+  }
+  .adminMain{
+    margin-left:286px;
+    min-height:100vh;
+    width:auto;
+  }
+}
+@media (min-width:821px) and (max-width:1100px){
+  .adminSidebar{width:238px}
+  .adminMain{margin-left:238px}
+}
