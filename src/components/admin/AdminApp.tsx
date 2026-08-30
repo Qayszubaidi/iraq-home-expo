@@ -5,7 +5,7 @@ import { adminRest, getSession, signOut, uploadMedia } from "@/lib/cms/adminClie
 import { pageDefinitions, sectorDefinitions } from "@/lib/cms/adminConfig";
 import { sectors as codeSectors } from "@/data/site";
 
-type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms";
+type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms"|"ai";
 type Json = Record<string, any>;
 
 const emptyPage = {eyebrow:"",title:"",copy:"",heroImage:"",heroAlt:"",heroPosition:"center center",primary:"",primaryHref:"",seoTitle:"",seoDescription:""};
@@ -120,7 +120,8 @@ export default function AdminApp(){
    ["sectors","Sectors","03"],
    ["media","Media Library","04"],
    ["settings","Site Settings","05"],
-   ["forms","Forms","06"]
+   ["forms","Forms","06"],
+   ["ai","AI Assistant","07"]
  ];
  const activeLabel=nav.find(([k])=>k===tab)?.[1]||"Dashboard";
  return <div className="adminShell">
@@ -149,6 +150,7 @@ export default function AdminApp(){
        {tab==="media"&&<MediaLibrary onNotice={setNotice}/>}
        {tab==="settings"&&<SettingsEditor onNotice={setNotice}/>}
        {tab==="forms"&&<FormsEditor onNotice={setNotice}/>}
+       {tab==="ai"&&<AiAssistant onNotice={setNotice}/>}
      </div>
    </main>
  </div>
@@ -223,12 +225,108 @@ function PagesEditor({onNotice}:{onNotice:(s:string)=>void}){
  return <><div className="adminTop"><div><span>Content</span><h1>Page editor</h1><p>Current website values are pre-filled. Edit safely, save a draft, and publish only when approved.</p></div><select value={key} onChange={e=>setKey(e.target.value)}>{pageDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<div className="adminEditorGrid"><section className="adminCard"><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:12,flexWrap:"wrap"}}><h2 style={{marginBottom:0}}>{label} hero</h2><div style={{display:"flex",gap:8}}><button type="button" className="adminUpload" style={{background:"#fff",color:"#075453"}} onClick={()=>setShowHistory(v=>!v)}>History</button><button type="button" className="adminUpload" style={{background:"#fff",color:"#075453"}} onClick={restoreDefaults}>Restore website defaults</button></div></div>{showHistory&&<div style={{margin:"18px 0",padding:16,border:"1px solid #ded7cc",borderRadius:7,background:"#f8f5ef"}}><strong style={{display:"block",fontSize:12,marginBottom:10}}>Previously published versions</strong>{history.length===0?<p style={{fontSize:12,color:"#766f68",margin:0}}>No earlier version has been stored yet. Version history begins with the next publish.</p>:<div style={{display:"grid",gap:8}}>{history.map(row=><button type="button" key={row.id} onClick={()=>restoreRevision(row)} style={{border:"1px solid #ddd4c7",background:"#fff",padding:"10px 12px",textAlign:"left",cursor:"pointer",borderRadius:5}}><b style={{display:"block",fontSize:11}}>{row.content?.title||label}</b><span style={{fontSize:10,color:"#7d756d"}}>{new Date(row.created_at).toLocaleString()}</span></button>)}</div>}</div>}<div style={{marginTop:20}}><Field label="Eyebrow" value={form.eyebrow} onChange={v=>set("eyebrow",v)}/><Field label="Title" value={form.title} onChange={v=>set("title",v)}/><Field label="Description" multiline value={form.copy} onChange={v=>set("copy",v)}/><Field label="Hero image URL" value={form.heroImage} onChange={v=>set("heroImage",v)} placeholder="/assets/image.webp or media URL"/><Field label="Image alt text" value={form.heroAlt} onChange={v=>set("heroAlt",v)}/><Field label="Image position" value={form.heroPosition} onChange={v=>set("heroPosition",v)} placeholder="center center / bottom center"/><div className="adminTwo"><Field label="CTA label" value={form.primary} onChange={v=>set("primary",v)}/><Field label="CTA link" value={form.primaryHref} onChange={v=>set("primaryHref",v)}/></div><h3>SEO</h3><Field label="SEO title" value={form.seoTitle} onChange={v=>set("seoTitle",v)}/><Field label="SEO description" multiline value={form.seoDescription} onChange={v=>set("seoDescription",v)}/><div className="adminActions"><button onClick={save}>Save Draft</button><button className="primary" onClick={publish}>Publish</button></div></div></section><aside className="adminPreview"><span>Status</span><strong>{published?"Published CMS content":"Using website defaults"}</strong><p>Hero image</p>{form.heroImage?<img src={form.heroImage} alt="Preview"/>:<div className="adminEmptyPreview">Choose an image from Media Library and paste its URL here.</div>}</aside></div>}</>
 }
 
+
+function SectorImageControl({
+  label,value,onChange,onNotice,ratio="16 / 9"
+}:{
+  label:string;value:string;onChange:(v:string)=>void;onNotice:(s:string)=>void;ratio?:string
+}){
+  const [busy,setBusy]=useState(false);
+  const [open,setOpen]=useState(false);
+  const [items,setItems]=useState<any[]>([]);
+  const [loadingMedia,setLoadingMedia]=useState(false);
+
+  async function upload(file?:File){
+    if(!file) return;
+    setBusy(true);
+    try{
+      const url=await uploadMedia(file);
+      onChange(url);
+      onNotice(`${label} uploaded and selected.`);
+    }catch(e:any){
+      onNotice(e.message);
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  async function browse(){
+    setOpen(true);
+    setLoadingMedia(true);
+    try{
+      setItems(await adminRest<any[]>("media_assets?select=*&order=created_at.desc"));
+    }catch(e:any){
+      onNotice(e.message);
+    }finally{
+      setLoadingMedia(false);
+    }
+  }
+
+  return <div className="adminImageControl">
+    <div className="adminImageControlHead">
+      <div>
+        <span>{label}</span>
+        <small>Upload a new image or choose one from the Media Library.</small>
+      </div>
+      {value&&<button type="button" className="adminImageRemove" onClick={()=>onChange("")}>Clear</button>}
+    </div>
+
+    <div className="adminImagePreview" style={{aspectRatio:ratio}}>
+      {value
+        ? <img src={value} alt={`${label} preview`} />
+        : <div className="adminImagePlaceholder"><span>Image preview</span><small>No image selected</small></div>}
+    </div>
+
+    <div className="adminImageControlActions">
+      <label className="adminImageUpload">
+        {busy?"Uploading…":"Upload image"}
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/avif"
+          disabled={busy}
+          onChange={e=>upload(e.target.files?.[0])}
+        />
+      </label>
+      <button type="button" onClick={browse}>Choose from Media</button>
+    </div>
+
+    <details className="adminImageAdvanced">
+      <summary>Advanced: image URL</summary>
+      <input value={value} onChange={e=>onChange(e.target.value)} placeholder="/assets/image.webp or media URL"/>
+    </details>
+
+    {open&&<div className="adminMediaPickerBackdrop" onClick={()=>setOpen(false)}>
+      <div className="adminMediaPicker" onClick={e=>e.stopPropagation()}>
+        <div className="adminMediaPickerHead">
+          <div><span>Media Library</span><h3>Choose {label.toLowerCase()}</h3></div>
+          <button type="button" onClick={()=>setOpen(false)}>×</button>
+        </div>
+        {loadingMedia
+          ? <div className="adminLoading">Loading media…</div>
+          : items.length
+            ? <div className="adminMediaPickerGrid">
+                {items.map(item=><button
+                  type="button"
+                  key={item.id}
+                  className={item.public_url===value?"selected":""}
+                  onClick={()=>{onChange(item.public_url);setOpen(false);onNotice(`${label} selected from Media Library.`)}}
+                >
+                  <img src={item.public_url} alt={item.name||"Media image"}/>
+                  <span>{item.name||"Image"}</span>
+                </button>)}
+              </div>
+            : <div className="adminEmptyPreview">No uploaded media yet. Use “Upload image” first, or add images in Media Library.</div>}
+      </div>
+    </div>}
+  </div>
+}
+
 function SectorsEditor({onNotice}:{onNotice:(s:string)=>void}){
  const [slug,setSlug]=useState("interiors"),[form,setForm]=useState<Json>(sectorDefaults("interiors")),[loading,setLoading]=useState(false); const label=sectorDefinitions.find(x=>x[0]===slug)?.[1]||slug;
  async function load(){setLoading(true);try{const [draft,pub]=await Promise.all([getDraft("cms_sector_drafts","slug",slug),getDraft("cms_sectors","slug",slug)]);const fallback=sectorDefaults(slug);const c=mergeCmsContent(fallback,pub?.content,draft?.content);setForm({...c,categories:Array.isArray(c.categories)&&c.categories.length?c.categories:fallback.categories})}catch(e:any){onNotice(e.message)}finally{setLoading(false)}}
  useEffect(()=>{load()},[slug]); const set=(k:string,v:any)=>setForm((f:Json)=>({...f,[k]:v}));
  async function save(publish=false){try{await saveRow("cms_sector_drafts","slug",slug,label,{content:form});if(publish)await saveRow("cms_sectors","slug",slug,label,{content:form});onNotice(`${label} ${publish?"published":"draft saved"}.`)}catch(e:any){onNotice(e.message)}}
- return <><div className="adminTop"><div><span>Exhibition</span><h1>Sector editor</h1><p>Control card images, sector hero images and sector copy.</p></div><select value={slug} onChange={e=>setSlug(e.target.value)}>{sectorDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<section className="adminCard wide"><Field label="Sector title" value={form.title} onChange={v=>set("title",v)}/><Field label="Short description" multiline value={form.short} onChange={v=>set("short",v)}/><div className="adminTwo"><Field label="Card cover image URL" value={form.image} onChange={v=>set("image",v)}/><Field label="Hero image URL" value={form.heroImage} onChange={v=>set("heroImage",v)}/></div><Field label="Product categories — one per line" multiline value={(form.categories||[]).join("\n")} onChange={v=>set("categories",v.split("\n").map((x:string)=>x.trim()).filter(Boolean))}/><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section>}</>
+ return <><div className="adminTop"><div><span>Exhibition</span><h1>Sector editor</h1><p>Control card images, sector hero images and sector copy.</p></div><select value={slug} onChange={e=>setSlug(e.target.value)}>{sectorDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<section className="adminCard wide"><Field label="Sector title" value={form.title} onChange={v=>set("title",v)}/><Field label="Short description" multiline value={form.short} onChange={v=>set("short",v)}/><div className="adminSectorImageGrid"><SectorImageControl label="Card cover image" value={form.image} onChange={v=>set("image",v)} onNotice={onNotice} ratio="4 / 5"/><SectorImageControl label="Hero image" value={form.heroImage} onChange={v=>set("heroImage",v)} onNotice={onNotice} ratio="16 / 9"/></div><Field label="Product categories — one per line" multiline value={(form.categories||[]).join("\n")} onChange={v=>set("categories",v.split("\n").map((x:string)=>x.trim()).filter(Boolean))}/><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section>}</>
 }
 
 function MediaLibrary({onNotice}:{onNotice:(s:string)=>void}){
@@ -241,3 +339,179 @@ const emptySettings={eventName:"Iraq Home Expo 2027",dates:"12–15 May 2027",ve
 function SettingsEditor({onNotice}:{onNotice:(s:string)=>void}){const [form,setForm]=useState<Json>(emptySettings);useEffect(()=>{(async()=>{try{const d=await getDraft("cms_settings_drafts","key","site"),p=await getDraft("cms_settings","key","site");setForm({...emptySettings,...(d?.value||p?.value||{})})}catch(e:any){onNotice(e.message)}})()},[]);const set=(k:string,v:string)=>setForm(f=>({...f,[k]:v}));async function save(pub=false){try{await saveRow("cms_settings_drafts","key","site","Site settings",{value:form});if(pub)await saveRow("cms_settings","key","site","Site settings",{value:form});onNotice(pub?"Site settings published.":"Site settings draft saved.")}catch(e:any){onNotice(e.message)}}return <><div className="adminTop"><div><span>Global</span><h1>Site settings</h1><p>Event, contact and social details shared across the site.</p></div></div><section className="adminCard wide"><div className="adminTwo"><Field label="Event name" value={form.eventName} onChange={v=>set("eventName",v)}/><Field label="Dates" value={form.dates} onChange={v=>set("dates",v)}/><Field label="Venue" value={form.venue} onChange={v=>set("venue",v)}/><Field label="City" value={form.city} onChange={v=>set("city",v)}/><Field label="Opening hours" value={form.hours} onChange={v=>set("hours",v)}/><Field label="General email" value={form.infoEmail} onChange={v=>set("infoEmail",v)}/><Field label="Sales email" value={form.salesEmail} onChange={v=>set("salesEmail",v)}/><Field label="Phone 1" value={form.phone1} onChange={v=>set("phone1",v)}/><Field label="Phone 2" value={form.phone2} onChange={v=>set("phone2",v)}/><Field label="Facebook" value={form.facebook} onChange={v=>set("facebook",v)}/><Field label="Instagram" value={form.instagram} onChange={v=>set("instagram",v)}/></div><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section></>}
 
 function FormsEditor({onNotice}:{onNotice:(s:string)=>void}){const initial={contactTo:"info@iraqhomeexpo.com,qayszubaidi@gmail.com",salesTo:"sales@iraqhomeexpo.com,qayszubaidi@gmail.com"};const [form,setForm]=useState<Json>(initial);useEffect(()=>{(async()=>{try{const d=await getDraft("cms_private_settings_drafts","key","forms"),p=await getDraft("cms_private_settings","key","forms");setForm({...initial,...(d?.value||p?.value||{})})}catch(e:any){onNotice(e.message)}})()},[]);async function save(pub=false){try{await saveRow("cms_private_settings_drafts","key","forms","Form recipients",{value:form});if(pub)await saveRow("cms_private_settings","key","forms","Form recipients",{value:form});onNotice(pub?"Form recipients published.":"Form recipient draft saved.")}catch(e:any){onNotice(e.message)}}return <><div className="adminTop"><div><span>Private configuration</span><h1>Form delivery</h1><p>These addresses are admin-only and are not exposed through the public CMS API.</p></div></div><section className="adminCard wide"><Field label="Visitor + Contact recipients" value={form.contactTo} onChange={v=>setForm({...form,contactTo:v})}/><Field label="Exhibitor + Sponsor recipients" value={form.salesTo} onChange={v=>setForm({...form,salesTo:v})}/><p className="adminHelp">Use comma-separated email addresses.</p><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section></>}
+
+
+type AiMode="ask"|"change"|"audit"|"developer";
+type AiOperation={target:"page"|"sector"|"settings";key:string;label:string;fields:{field:string;value:string}[]};
+type AiResult={
+  reply:string;
+  operations:AiOperation[];
+  developer_plan:{title:string;summary:string;files:string[];steps:string[];risk:string;requires_git:boolean};
+};
+
+function AiAssistant({onNotice}:{onNotice:(s:string)=>void}){
+  const [mode,setMode]=useState<AiMode>("ask");
+  const [message,setMessage]=useState("");
+  const [busy,setBusy]=useState(false);
+  const [result,setResult]=useState<AiResult|null>(null);
+  const [model,setModel]=useState("");
+  const [applied,setApplied]=useState(false);
+
+  async function run(){
+    if(!message.trim()) return;
+    const session=getSession();
+    if(!session?.access_token){onNotice("Your admin session expired. Sign in again.");return}
+    setBusy(true);setApplied(false);
+    try{
+      const response=await fetch("/api/admin/ai",{
+        method:"POST",
+        headers:{"Content-Type":"application/json",Authorization:`Bearer ${session.access_token}`},
+        body:JSON.stringify({mode,message})
+      });
+      const payload=await response.json();
+      if(!response.ok) throw new Error(payload?.error||"AI request failed.");
+      setResult(payload.result);
+      setModel(payload.model||"");
+    }catch(e:any){onNotice(e.message)}
+    finally{setBusy(false)}
+  }
+
+  function fieldsToObject(fields:{field:string;value:string}[]){
+    const out:Json={};
+    for(const item of fields){
+      if(item.field==="categories") out[item.field]=item.value.split("\\n").map(x=>x.trim()).filter(Boolean);
+      else out[item.field]=item.value;
+    }
+    return out;
+  }
+
+  async function applyDrafts(){
+    if(!result?.operations?.length)return;
+    setBusy(true);
+    try{
+      for(const op of result.operations){
+        if(op.target==="page"){
+          const draft=await getDraft("cms_page_drafts","key",op.key);
+          const published=await getDraft("cms_pages","key",op.key);
+          const base=mergeCmsContent(pageDefaults(op.key),published?.content,draft?.content);
+          const next={...base,...fieldsToObject(op.fields)};
+          await saveRow("cms_page_drafts","key",op.key,op.label||op.key,{content:next});
+        }else if(op.target==="sector"){
+          const draft=await getDraft("cms_sector_drafts","slug",op.key);
+          const published=await getDraft("cms_sectors","slug",op.key);
+          const base=mergeCmsContent(sectorDefaults(op.key),published?.content,draft?.content);
+          const next={...base,...fieldsToObject(op.fields)};
+          await saveRow("cms_sector_drafts","slug",op.key,op.label||op.key,{content:next});
+        }else if(op.target==="settings"){
+          const draft=await getDraft("cms_settings_drafts","key",op.key);
+          const published=await getDraft("cms_settings","key",op.key);
+          const base={...(published?.value||{}),...(draft?.value||{})};
+          const next={...base,...fieldsToObject(op.fields)};
+          await saveRow("cms_settings_drafts","key",op.key,op.label||op.key,{value:next});
+        }
+      }
+      setApplied(true);
+      onNotice("AI changes saved to drafts only. Review them in Pages, Sectors or Site Settings before publishing.");
+    }catch(e:any){onNotice(e.message)}
+    finally{setBusy(false)}
+  }
+
+  const examples:Record<AiMode,string[]>={
+    ask:[
+      "Which pages still use the same image?",
+      "What is currently configured for the About page?"
+    ],
+    change:[
+      "Change the About hero copy to be more concise, but keep the existing title and image.",
+      "Use the newest suitable media image for the Kitchen card and save it as a draft."
+    ],
+    audit:[
+      "Audit the site for duplicated imagery, empty SEO fields and inconsistent contact details.",
+      "Check the eight sectors for missing or weak content."
+    ],
+    developer:[
+      "Add a countdown timer to the Home page for 12 May 2027.",
+      "Add a cinematic video section below the About hero with subtle scroll animation."
+    ]
+  };
+
+  return <>
+    <div className="adminTop">
+      <div><span>Controlled AI</span><h1>AI website assistant</h1><p>Ask about the site, prepare CMS drafts, run audits, or plan new website features.</p></div>
+    </div>
+
+    <section className="adminAiLayout">
+      <div className="adminAiComposer adminCard">
+        <div className="adminAiModes">
+          {([
+            ["ask","Ask"],
+            ["change","Make Changes"],
+            ["audit","Audit Website"],
+            ["developer","Developer"]
+          ] as [AiMode,string][]).map(([k,l])=><button type="button" key={k} className={mode===k?"active":""} onClick={()=>{setMode(k);setResult(null);setApplied(false)}}>{l}</button>)}
+        </div>
+
+        <div className="adminAiModeIntro">
+          <strong>{mode==="ask"?"Ask about the website":mode==="change"?"Create safe CMS drafts":mode==="audit"?"Inspect the website content": "Plan a new code feature"}</strong>
+          <span>{mode==="developer"?"Developer mode creates a code implementation plan. It does not push code or deploy automatically.":"AI never publishes automatically. Proposed content changes are saved to Draft first."}</span>
+        </div>
+
+        <textarea className="adminAiInput" value={message} onChange={e=>setMessage(e.target.value)} placeholder="Tell the assistant what you want to do…" />
+
+        <div className="adminAiExamples">
+          <span>Try:</span>
+          {examples[mode].map(x=><button type="button" key={x} onClick={()=>setMessage(x)}>{x}</button>)}
+        </div>
+
+        <div className="adminAiSendRow">
+          <span>Admin-authenticated · server-side AI key</span>
+          <button className="adminPrimaryAction" type="button" disabled={busy||!message.trim()} onClick={run}>{busy?"Working…":"Send to AI"} <span>→</span></button>
+        </div>
+      </div>
+
+      <aside className="adminAiSafety">
+        <span>Safety model</span>
+        <h3>Draft first. Publish yourself.</h3>
+        <p>CMS requests can be prepared automatically, but the live site changes only after you review and press Publish.</p>
+        <ul>
+          <li>AI cannot access your Supabase service key in the browser.</li>
+          <li>AI cannot publish CMS content automatically.</li>
+          <li>Developer mode does not change Git or deploy code.</li>
+          <li>Existing design rules stay protected.</li>
+        </ul>
+      </aside>
+    </section>
+
+    {result&&<section className="adminAiResult">
+      <div className="adminCard">
+        <div className="adminAiResultHead"><div><span>AI response</span>{model&&<small>{model}</small>}</div></div>
+        <p className="adminAiReply">{result.reply}</p>
+
+        {!!result.operations?.length&&<>
+          <h3>Proposed CMS changes</h3>
+          <div className="adminAiOperations">
+            {result.operations.map((op,i)=><article key={`${op.target}-${op.key}-${i}`}>
+              <div><span>{op.target}</span><strong>{op.label||op.key}</strong></div>
+              <ul>{op.fields.map((f,j)=><li key={`${f.field}-${j}`}><b>{f.field}</b><span>{f.value}</span></li>)}</ul>
+            </article>)}
+          </div>
+          <div className="adminActions">
+            <button type="button" onClick={()=>setResult(null)}>Discard</button>
+            <button type="button" className="primary" disabled={busy||applied} onClick={applyDrafts}>{applied?"Saved to Drafts":"Apply to Drafts"}</button>
+          </div>
+        </>}
+
+        {mode==="developer"&&result.developer_plan?.title&&<>
+          <h3>Developer implementation plan</h3>
+          <div className="adminDeveloperPlan">
+            <strong>{result.developer_plan.title}</strong>
+            <p>{result.developer_plan.summary}</p>
+            {!!result.developer_plan.files?.length&&<div><span>Likely files</span><ul>{result.developer_plan.files.map(x=><li key={x}>{x}</li>)}</ul></div>}
+            {!!result.developer_plan.steps?.length&&<div><span>Implementation</span><ol>{result.developer_plan.steps.map(x=><li key={x}>{x}</li>)}</ol></div>}
+            <div className="adminDeveloperRisk"><b>Risk / review</b><span>{result.developer_plan.risk}</span></div>
+          </div>
+        </>}
+      </div>
+    </section>}
+  </>
+}
