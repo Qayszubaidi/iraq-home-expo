@@ -49,7 +49,7 @@ async function createLead(payload: Record<string, unknown>) {
   }
 }
 
-async function updateLeadDelivery(id: string | undefined, emailSent: boolean, deliveryError?: string) {
+async function updateLeadDelivery(id: string | null | undefined, emailSent: boolean, deliveryError?: string) {
   if (!id) return;
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -236,3 +236,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Send failed" }, { status: 500 });
   }
 }
+
