@@ -10,68 +10,15 @@ import StoryPanels from "@/components/StoryPanels";
 import StatCard from "@/components/StatCard";
 import FairShowcase from "@/components/FairShowcase";
 import OpeningCeremony from "@/components/OpeningCeremony";
+import CmsHomeHero from "@/components/CmsHomeHero";
 import { event, marketStats, sectors, media } from "@/data/site";
+import { getCmsSectors } from "@/lib/cms/public";
 
-export default function Home() {
+export default async function Home() {
+  const displaySectors = await getCmsSectors(sectors);
   return (
     <>
-      <section className="hero">
-        <Image
-          src="/assets/hero-interior.webp"
-          fill
-          priority
-          alt="Contemporary interior design"
-          className="cover heroImage"
-          sizes="100vw"
-        />
-        <div className="heroGradient" />
-        <div className="heroPattern" aria-hidden="true" />
-        <div className="heroContent">
-          <MaskReveal>
-            <div className="heroLabels">
-              <span className="archLabel">{event.dates}</span>
-              <span className="archLabel">{event.city}</span>
-            </div>
-            <h1 className="heroTitle">
-              <span className="heroTitleLine">Iraq&apos;s home &amp;</span>
-              <span className="heroTitleLine">interiors market</span>
-              <span className="heroTitleLine heroTitleAccent">
-                meets here<span className="heroTitleDot">.</span>
-              </span>
-            </h1>
-            <p className="heroLead">
-              An international exhibition connecting manufacturers, brands and professional
-              buyers across Iraq&apos;s evolving home market.
-            </p>
-            <div className="actions">
-              <Link className="button gold" href="/register/visitor">
-                Visit the Expo <span aria-hidden="true">→</span>
-              </Link>
-              <Link className="button ghost" href="/exhibit">
-                Exhibit with Us <span aria-hidden="true">→</span>
-              </Link>
-            </div>
-          </MaskReveal>
-        </div>
-        <div className="heroMeta">
-          <div className="archLabelBlock">
-            <small>Venue</small>
-            <span>{event.venue}</span>
-          </div>
-          <div className="archLabelBlock">
-            <small>Location</small>
-            <span>{event.city}</span>
-          </div>
-          <div className="archLabelBlock">
-            <small>Hours</small>
-            <span>{event.hours}</span>
-          </div>
-        </div>
-        <div className="scrollCue">
-          <span>Scroll</span>
-          <i />
-        </div>
-      </section>
+      <CmsHomeHero />
 
       <section className="institutional">
         <span>Organized by</span>
@@ -111,7 +58,7 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <SectorShowcase sectors={sectors} />
+      <SectorShowcase sectors={displaySectors} />
 
       <ImageGallery />
 

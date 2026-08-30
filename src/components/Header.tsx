@@ -5,14 +5,16 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { event, nav, sectors } from "@/data/site";
+import type { PublicSiteSettings } from "@/lib/cms/public";
 
 function Chevron(){return <svg className="v4Chevron" viewBox="0 0 12 8" aria-hidden="true"><path d="M1 1.5 6 6.5l5-5"/></svg>}
 function SocialIcon({type}:{type:"facebook"|"instagram"}){return type==="facebook"?
 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v5h4v-5h3.2l.8-4H13V9c0-.7.3-1 1-1Z"/></svg>:
 <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>}
 
-export default function Header(){
+export default function Header({cmsSettings}:{cmsSettings?:PublicSiteSettings|null}){
   const pathname = usePathname();
+  const site={venue:cmsSettings?.venue||event.venue,dates:cmsSettings?.dates||event.dates,infoEmail:cmsSettings?.infoEmail||"info@iraqhomeexpo.com",facebook:cmsSettings?.facebook||"https://www.facebook.com/profile.php?id=61591852047921",instagram:cmsSettings?.instagram||"https://www.instagram.com/iraqhomeexpo/"};
   const [scrolled,setScrolled]=useState(false);
   const [open,setOpen]=useState(false);
   const [sectorsOpen,setSectorsOpen]=useState(false);
@@ -24,9 +26,9 @@ export default function Header(){
     <div className={`v4Utility ${scrolled?"isHidden":""}`}>
       <div className="v4UtilityInner">
         <div className="v4UtilityInfo">
-          <span>{event.venue}</span><i/><span>{event.dates}</span><i/><a href="mailto:info@iraqhomeexpo.com">info@iraqhomeexpo.com</a>
+          <span>{site.venue}</span><i/><span>{site.dates}</span><i/><a href={`mailto:${site.infoEmail}`}>{site.infoEmail}</a>
         </div>
-        <div className="v4UtilitySocial"><a href="https://www.facebook.com/profile.php?id=61591852047921" target="_blank" rel="noreferrer" aria-label="Facebook"><SocialIcon type="facebook"/></a><a href="https://www.instagram.com/iraqhomeexpo/" target="_blank" rel="noreferrer" aria-label="Instagram"><SocialIcon type="instagram"/></a></div>
+        <div className="v4UtilitySocial"><a href={site.facebook} target="_blank" rel="noreferrer" aria-label="Facebook"><SocialIcon type="facebook"/></a><a href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><SocialIcon type="instagram"/></a></div>
       </div>
     </div>
     <header className={`v4Header ${scrolled?"isScrolled":""}`}>

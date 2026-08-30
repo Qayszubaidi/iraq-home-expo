@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import {getPrivateFormSettings} from "@/lib/cms/private";
 
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_REQUESTS = 6;
@@ -123,9 +124,10 @@ export async function POST(req: NextRequest) {
       socketTimeout: 20_000,
     });
 
+    const privateFormSettings = await getPrivateFormSettings();
     const recipients = type === "exhibitor"
-      ? parseRecipients(process.env.SALES_TO, ["sales@iraqhomeexpo.com", "qayszubaidi@gmail.com"])
-      : parseRecipients(process.env.CONTACT_TO, ["info@iraqhomeexpo.com", "qayszubaidi@gmail.com"]);
+      ? parseRecipients(privateFormSettings?.salesTo || process.env.SALES_TO, ["sales@iraqhomeexpo.com", "qayszubaidi@gmail.com"])
+      : parseRecipients(privateFormSettings?.contactTo || process.env.CONTACT_TO, ["info@iraqhomeexpo.com", "qayszubaidi@gmail.com"]);
 
     const contactSubject = clean(raw.subject, 120).replace(/[\r\n]+/g, " ");
     const title = type === "visitor"

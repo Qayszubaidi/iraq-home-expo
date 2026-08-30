@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FloatingRegister from "@/components/FloatingRegister";
 import ScrollProgress from "@/components/ScrollProgress";
+import { getPublicSiteSettings } from "@/lib/cms/public";
 
 const sans = DM_Sans({
   subsets: ["latin"],
@@ -33,15 +34,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const cmsSettings = await getPublicSiteSettings();
   return (
     <html lang="en" className={`${sans.variable} ${display.variable}`}>
       <body>
         <ScrollProgress />
-        <Header />
+        <Header cmsSettings={cmsSettings} />
         <main>{children}</main>
         <FloatingRegister />
-        <Footer />
+        <Footer cmsSettings={cmsSettings} />
       </body>
     </html>
   );
