@@ -20,6 +20,60 @@ const parseRecipients = (value: string | undefined, defaults: string[]) => {
 };
 const ipFor = (req: NextRequest) => (req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown").split(",")[0].trim();
 
+
+async function createLead(payload: Record<string, unknown>) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  try {
+    const response = await fetch(`${url}/rest/v1/form_leads`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(payload),
+      cache: "no-store",
+    });
+    if (!response.ok) {
+      console.error("Lead storage failed", response.status, await response.text());
+      return null;
+    }
+    const rows = await response.json();
+    return rows?.[0]?.id as string | undefined;
+  } catch (error) {
+    console.error("Lead storage failed", error);
+    return null;
+  }
+}
+
+async function updateLeadDelivery(id: string | undefined, emailSent: boolean, deliveryError?: string) {
+  if (!id) return;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return;
+  try {
+    await fetch(`${url}/rest/v1/form_leads?id=eq.${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email_sent: emailSent,
+        delivery_error: deliveryError ? deliveryError.slice(0, 1000) : null,
+        updated_at: new Date().toISOString(),
+      }),
+      cache: "no-store",
+    });
+  } catch (error) {
+    console.error("Lead delivery status update failed", error);
+  }
+}
+
 function rateLimited(ip: string) {
   const now = Date.now();
   if (buckets.size > 1000) {
@@ -145,13 +199,36 @@ export async function POST(req: NextRequest) {
       `<tr><td style="padding:10px;border-bottom:1px solid #e7e1d7;width:34%"><strong>${esc(label(key))}</strong></td><td style="padding:10px;border-bottom:1px solid #e7e1d7">${esc(Array.isArray(value) ? value.join(", ") : value)}</td></tr>`,
     ).join("");
 
-    await transporter.sendMail({
-      from: process.env.SMTP_FROM || "Iraq Home Expo <website@iraqhomeexpo.com>",
-      to: recipients,
-      replyTo: email,
-      subject: title,
-      html: `<div style="font-family:Arial,sans-serif;color:#231f20;max-width:760px"><div style="background:#005251;color:#fff;padding:24px"><h2 style="margin:0">${esc(title)}</h2></div><table style="border-collapse:collapse;width:100%;background:#fff">${rows}</table><p style="font-size:12px;color:#777">Submitted via iraqhomeexpo.com</p></div>`,
+    const leadData = Object.fromEntries(entries.map(([key, value]) => [key, value]));
+    const leadId = await createLead({
+      form_type: type,
+      status: "new",
+      name: type === "exhibitor" ? clean(raw.contactPerson, 120) : clean(raw.fullName, 120),
+      company: type === "exhibitor" ? clean(raw.companyName, 160) : clean(raw.company, 160),
+      email,
+      phone: clean(raw.phone, 60),
+      country: clean(raw.country, 100),
+      subject: type === "contact" ? contactSubject : null,
+      participation_type: type === "exhibitor" ? clean(raw.participationType, 40) : null,
+      data: leadData,
+      email_sent: false,
+      source: "website",
     });
+
+    try {
+      await transporter.sendMail({
+        from: process.env.SMTP_FROM || "Iraq Home Expo <website@iraqhomeexpo.com>",
+        to: recipients,
+        replyTo: email,
+        subject: title,
+        html: `<div style="font-family:Arial,sans-serif;color:#231f20;max-width:760px"><div style="background:#005251;color:#fff;padding:24px"><h2 style="margin:0">${esc(title)}</h2></div><table style="border-collapse:collapse;width:100%;background:#fff">${rows}</table><p style="font-size:12px;color:#777">Submitted via iraqhomeexpo.com</p></div>`,
+      });
+      await updateLeadDelivery(leadId, true);
+    } catch (mailError) {
+      const message = mailError instanceof Error ? mailError.message : "Mail delivery failed";
+      await updateLeadDelivery(leadId, false, message);
+      throw mailError;
+    }
 
     return NextResponse.json({ ok: true });
   } catch (error) {

@@ -5,7 +5,7 @@ import { adminRest, getSession, signOut, uploadMedia } from "@/lib/cms/adminClie
 import { pageDefinitions, sectorDefinitions } from "@/lib/cms/adminConfig";
 import { sectors as codeSectors } from "@/data/site";
 
-type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms"|"ai";
+type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms"|"leads"|"ai";
 type Json = Record<string, any>;
 
 const emptyPage = {eyebrow:"",title:"",copy:"",heroImage:"",heroAlt:"",heroPosition:"center center",primary:"",primaryHref:"",seoTitle:"",seoDescription:""};
@@ -121,7 +121,8 @@ export default function AdminApp(){
    ["media","Media Library","04"],
    ["settings","Site Settings","05"],
    ["forms","Forms","06"],
-   ["ai","AI Assistant","07"]
+   ["leads","Leads","07"],
+   ["ai","AI Assistant","08"]
  ];
  const activeLabel=nav.find(([k])=>k===tab)?.[1]||"Dashboard";
  return <div className="adminShell">
@@ -150,6 +151,7 @@ export default function AdminApp(){
        {tab==="media"&&<MediaLibrary onNotice={setNotice}/>}
        {tab==="settings"&&<SettingsEditor onNotice={setNotice}/>}
        {tab==="forms"&&<FormsEditor onNotice={setNotice}/>}
+       {tab==="leads"&&<LeadsEditor onNotice={setNotice}/>}
        {tab==="ai"&&<AiAssistant onNotice={setNotice}/>}
      </div>
    </main>
@@ -337,6 +339,157 @@ function MediaLibrary({onNotice}:{onNotice:(s:string)=>void}){
 
 const emptySettings={eventName:"Iraq Home Expo 2027",dates:"12–15 May 2027",venue:"Baghdad International Fair",city:"Baghdad, Iraq",hours:"11:00 AM – 6:00 PM",infoEmail:"info@iraqhomeexpo.com",salesEmail:"sales@iraqhomeexpo.com",phone1:"+964 782 445 5860",phone2:"+964 770 255 0297",facebook:"https://www.facebook.com/profile.php?id=61591852047921",instagram:"https://www.instagram.com/iraqhomeexpo/"};
 function SettingsEditor({onNotice}:{onNotice:(s:string)=>void}){const [form,setForm]=useState<Json>(emptySettings);useEffect(()=>{(async()=>{try{const d=await getDraft("cms_settings_drafts","key","site"),p=await getDraft("cms_settings","key","site");setForm({...emptySettings,...(d?.value||p?.value||{})})}catch(e:any){onNotice(e.message)}})()},[]);const set=(k:string,v:string)=>setForm(f=>({...f,[k]:v}));async function save(pub=false){try{await saveRow("cms_settings_drafts","key","site","Site settings",{value:form});if(pub)await saveRow("cms_settings","key","site","Site settings",{value:form});onNotice(pub?"Site settings published.":"Site settings draft saved.")}catch(e:any){onNotice(e.message)}}return <><div className="adminTop"><div><span>Global</span><h1>Site settings</h1><p>Event, contact and social details shared across the site.</p></div></div><section className="adminCard wide"><div className="adminTwo"><Field label="Event name" value={form.eventName} onChange={v=>set("eventName",v)}/><Field label="Dates" value={form.dates} onChange={v=>set("dates",v)}/><Field label="Venue" value={form.venue} onChange={v=>set("venue",v)}/><Field label="City" value={form.city} onChange={v=>set("city",v)}/><Field label="Opening hours" value={form.hours} onChange={v=>set("hours",v)}/><Field label="General email" value={form.infoEmail} onChange={v=>set("infoEmail",v)}/><Field label="Sales email" value={form.salesEmail} onChange={v=>set("salesEmail",v)}/><Field label="Phone 1" value={form.phone1} onChange={v=>set("phone1",v)}/><Field label="Phone 2" value={form.phone2} onChange={v=>set("phone2",v)}/><Field label="Facebook" value={form.facebook} onChange={v=>set("facebook",v)}/><Field label="Instagram" value={form.instagram} onChange={v=>set("instagram",v)}/></div><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section></>}
+
+
+type LeadRow={
+  id:string; form_type:"visitor"|"exhibitor"|"contact"; status:"new"|"contacted"|"archived";
+  name?:string; company?:string; email:string; phone?:string; country?:string; subject?:string;
+  participation_type?:string; data?:Json; email_sent:boolean; delivery_error?:string;
+  source?:string; created_at:string; updated_at:string;
+};
+
+function LeadsEditor({onNotice}:{onNotice:(s:string)=>void}){
+  const [rows,setRows]=useState<LeadRow[]>([]);
+  const [loading,setLoading]=useState(true);
+  const [query,setQuery]=useState("");
+  const [type,setType]=useState("all");
+  const [status,setStatus]=useState("active");
+  const [selected,setSelected]=useState<LeadRow|null>(null);
+
+  async function load(){
+    setLoading(true);
+    try{
+      const data=await adminRest<LeadRow[]>("form_leads?select=*&order=created_at.desc&limit=500");
+      setRows(data||[]);
+    }catch(e:any){onNotice(e.message)}
+    finally{setLoading(false)}
+  }
+  useEffect(()=>{load()},[]);
+
+  async function setLeadStatus(lead:LeadRow,next:LeadRow["status"]){
+    try{
+      await adminRest(`form_leads?id=eq.${encodeURIComponent(lead.id)}`,{
+        method:"PATCH",
+        body:JSON.stringify({status:next,updated_at:new Date().toISOString()})
+      });
+      setRows(list=>list.map(x=>x.id===lead.id?{...x,status:next,updated_at:new Date().toISOString()}:x));
+      setSelected(current=>current?.id===lead.id?{...current,status:next}:current);
+      onNotice(`Lead marked ${next}.`);
+    }catch(e:any){onNotice(e.message)}
+  }
+
+  const q=query.trim().toLowerCase();
+  const filtered=rows.filter(row=>{
+    if(type!=="all"&&row.form_type!==type)return false;
+    if(status==="active"&&row.status==="archived")return false;
+    if(status!=="all"&&status!=="active"&&row.status!==status)return false;
+    if(!q)return true;
+    return [row.name,row.company,row.email,row.phone,row.country,row.subject,row.participation_type]
+      .some(v=>String(v||"").toLowerCase().includes(q));
+  });
+
+  const counts={
+    total:rows.filter(x=>x.status!=="archived").length,
+    new:rows.filter(x=>x.status==="new").length,
+    exhibitors:rows.filter(x=>x.form_type==="exhibitor"&&x.status!=="archived").length,
+    visitors:rows.filter(x=>x.form_type==="visitor"&&x.status!=="archived").length,
+  };
+
+  function exportCsv(){
+    const headers=["Date","Type","Status","Name","Company","Email","Phone","Country","Participation","Subject","Email Sent"];
+    const escape=(v:any)=>`"${String(v??"").replace(/"/g,'""')}"`;
+    const lines=filtered.map(r=>[
+      new Date(r.created_at).toISOString(),r.form_type,r.status,r.name,r.company,r.email,r.phone,r.country,
+      r.participation_type,r.subject,r.email_sent?"Yes":"No"
+    ].map(escape).join(","));
+    const blob=new Blob([[headers.map(escape).join(","),...lines].join("\n")],{type:"text/csv;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url;a.download=`iraq-home-expo-leads-${new Date().toISOString().slice(0,10)}.csv`;a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  const labelFor=(k:string)=>k.replace(/([A-Z])/g," $1").replace(/^./,c=>c.toUpperCase());
+
+  return <>
+    <div className="adminTop">
+      <div><span>CRM</span><h1>Website leads</h1><p>Visitor registrations, exhibitor/sponsor enquiries and contact submissions in one place.</p></div>
+      <div className="adminLeadTopActions"><button onClick={load}>Refresh</button><button className="primary" onClick={exportCsv}>Export CSV</button></div>
+    </div>
+
+    <div className="adminLeadMetrics">
+      <div><strong>{counts.total}</strong><span>Active leads</span></div>
+      <div><strong>{counts.new}</strong><span>New</span></div>
+      <div><strong>{counts.exhibitors}</strong><span>Exhibitor / Sponsor</span></div>
+      <div><strong>{counts.visitors}</strong><span>Visitor registrations</span></div>
+    </div>
+
+    <section className="adminCard adminLeadCard">
+      <div className="adminLeadFilters">
+        <input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search name, company, email or phone…" />
+        <select value={type} onChange={e=>setType(e.target.value)}>
+          <option value="all">All form types</option><option value="visitor">Visitors</option>
+          <option value="exhibitor">Exhibitors / Sponsors</option><option value="contact">Contact enquiries</option>
+        </select>
+        <select value={status} onChange={e=>setStatus(e.target.value)}>
+          <option value="active">Active</option><option value="new">New</option>
+          <option value="contacted">Contacted</option><option value="archived">Archived</option><option value="all">All</option>
+        </select>
+      </div>
+
+      {loading?<div className="adminLoading">Loading leads…</div>:filtered.length===0?
+        <div className="adminLeadEmpty">No leads match the current filters.</div>:
+        <div className="adminLeadTableWrap"><table className="adminLeadTable">
+          <thead><tr><th>Lead</th><th>Type</th><th>Company</th><th>Contact</th><th>Received</th><th>Status</th></tr></thead>
+          <tbody>{filtered.map(row=><tr key={row.id} onClick={()=>setSelected(row)}>
+            <td><strong>{row.name||"Unnamed lead"}</strong><span>{row.country||"—"}</span></td>
+            <td><span className={`leadType leadType--${row.form_type}`}>{row.form_type==="exhibitor"?(row.participation_type||"Exhibitor"):row.form_type}</span></td>
+            <td>{row.company||"—"}</td>
+            <td><a href={`mailto:${row.email}`} onClick={e=>e.stopPropagation()}>{row.email}</a><span>{row.phone||""}</span></td>
+            <td>{new Date(row.created_at).toLocaleDateString()}<span>{new Date(row.created_at).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}</span></td>
+            <td><span className={`leadStatus leadStatus--${row.status}`}>{row.status}</span></td>
+          </tr>)}</tbody>
+        </table></div>}
+    </section>
+
+    {selected&&<div className="adminLeadDrawerBackdrop" onClick={()=>setSelected(null)}>
+      <aside className="adminLeadDrawer" onClick={e=>e.stopPropagation()}>
+        <div className="adminLeadDrawerHead">
+          <div><span>{selected.form_type} lead</span><h2>{selected.name||selected.company||"Lead details"}</h2><p>{new Date(selected.created_at).toLocaleString()}</p></div>
+          <button onClick={()=>setSelected(null)}>×</button>
+        </div>
+        <div className="adminLeadQuick">
+          <a href={`mailto:${selected.email}`}>Email</a>
+          {selected.phone&&<a href={`tel:${selected.phone}`}>Call</a>}
+          {selected.status!=="contacted"&&<button onClick={()=>setLeadStatus(selected,"contacted")}>Mark Contacted</button>}
+          {selected.status==="contacted"&&<button onClick={()=>setLeadStatus(selected,"new")}>Mark New</button>}
+        </div>
+
+        <div className="adminLeadDetailGrid">
+          <div><span>Email</span><strong>{selected.email}</strong></div>
+          <div><span>Phone</span><strong>{selected.phone||"—"}</strong></div>
+          <div><span>Company</span><strong>{selected.company||"—"}</strong></div>
+          <div><span>Country</span><strong>{selected.country||"—"}</strong></div>
+          {selected.participation_type&&<div><span>Participation</span><strong>{selected.participation_type}</strong></div>}
+          {selected.subject&&<div><span>Subject</span><strong>{selected.subject}</strong></div>}
+          <div><span>Email delivery</span><strong>{selected.email_sent?"Sent":"Not confirmed"}</strong></div>
+          <div><span>Status</span><strong>{selected.status}</strong></div>
+        </div>
+
+        {selected.delivery_error&&<div className="adminLeadDeliveryError"><b>Email delivery error</b><span>{selected.delivery_error}</span></div>}
+
+        <section className="adminLeadSubmission">
+          <span>Submitted form</span>
+          <div>{Object.entries(selected.data||{}).filter(([k])=>k!=="consent").map(([k,v])=><div key={k}><b>{labelFor(k)}</b><p>{Array.isArray(v)?v.join(", "):String(v||"—")}</p></div>)}</div>
+        </section>
+
+        <div className="adminLeadDrawerFooter">
+          {selected.status!=="archived"?<button onClick={()=>setLeadStatus(selected,"archived")}>Archive lead</button>:<button onClick={()=>setLeadStatus(selected,"new")}>Restore lead</button>}
+        </div>
+      </aside>
+    </div>}
+  </>
+}
 
 function FormsEditor({onNotice}:{onNotice:(s:string)=>void}){const initial={contactTo:"info@iraqhomeexpo.com,qayszubaidi@gmail.com",salesTo:"sales@iraqhomeexpo.com,qayszubaidi@gmail.com"};const [form,setForm]=useState<Json>(initial);useEffect(()=>{(async()=>{try{const d=await getDraft("cms_private_settings_drafts","key","forms"),p=await getDraft("cms_private_settings","key","forms");setForm({...initial,...(d?.value||p?.value||{})})}catch(e:any){onNotice(e.message)}})()},[]);async function save(pub=false){try{await saveRow("cms_private_settings_drafts","key","forms","Form recipients",{value:form});if(pub)await saveRow("cms_private_settings","key","forms","Form recipients",{value:form});onNotice(pub?"Form recipients published.":"Form recipient draft saved.")}catch(e:any){onNotice(e.message)}}return <><div className="adminTop"><div><span>Private configuration</span><h1>Form delivery</h1><p>These addresses are admin-only and are not exposed through the public CMS API.</p></div></div><section className="adminCard wide"><Field label="Visitor + Contact recipients" value={form.contactTo} onChange={v=>setForm({...form,contactTo:v})}/><Field label="Exhibitor + Sponsor recipients" value={form.salesTo} onChange={v=>setForm({...form,salesTo:v})}/><p className="adminHelp">Use comma-separated email addresses.</p><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section></>}
 
