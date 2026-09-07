@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
+import { breadcrumbJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
@@ -30,6 +32,8 @@ export default function SponsorPage() {
       primary="Discuss Sponsorship"
       primaryHref="/register/exhibitor"
     />
+<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd([{name:"Iraq Home Expo 2027",path:"/"},{name:"Sponsor Iraq Home Expo",path:"/sponsor"}]))}}/>
+<SeoBreadcrumbs items={[{label:"Home",href:"/"},{label:"Sponsor Iraq Home Expo"}]}/>
 
     <section className="contentSplit sponsorIntro">
       <Reveal>

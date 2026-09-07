@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
+import { breadcrumbJsonLd } from "@/lib/seo";
 import PageHero from "@/components/PageHero";
 import VisualBand from "@/components/VisualBand";
 import VideoFeature from "@/components/VideoFeature";
@@ -12,6 +14,8 @@ export const metadata: Metadata = {
   openGraph:{title:"Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",description:"Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",url:"https://iraqhomeexpo.com/exhibit",type:"website"},
 };
 export default function Exhibit(){return <><PageHero cmsKey="exhibit" eyebrow={`${event.dates} · Baghdad`} title="Exhibit at Iraq Home Expo 2027" copy="Present your products, meet professional buyers and build commercial relationships in Iraq’s developing home and residential market." image="/assets/exhibit-hero-new.jpg" imageAlt="International furniture and interiors exhibitors meeting buyers at Iraq Home Expo 2027" imagePosition="center center" primary="Register as an Exhibitor" primaryHref="/register/exhibitor"/>
+<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd([{name:"Iraq Home Expo 2027",path:"/"},{name:"Exhibit in Iraq",path:"/exhibit"}]))}}/>
+<SeoBreadcrumbs items={[{label:"Home",href:"/"},{label:"Exhibit in Iraq"}]}/>
 <ShowcaseConnection/>
 <section className="featureGrid six">{[["Access the Iraqi market","Introduce your products to professionals across Iraq’s home sectors."],["Meet professional buyers","Connect with importers, wholesalers, retailers and purchasing specialists."],["Find distributors & partners","Meet potential distributors, agents and commercial partners."],["Showcase your products","Present collections, technologies and solutions directly to the market."],["Build brand visibility","Strengthen your company’s presence among buyers and decision-makers."],["Create new business","Generate leads and develop relationships beyond the exhibition."]].map(([h,p])=><div className="feature" key={h}><h3>{h}</h3><p>{p}</p></div>)}</section>
 <section className="market compact"><div className="marketIntro"><span className="eyebrow dark">Why Iraq</span><h2>A growing market for modern home solutions.</h2><p>Use the exhibition as a focused route into market conversations, supplier relationships and commercial opportunities.</p><Link className="textLink" href="/why-iraq">Discover Why Iraq ↗</Link></div><div className="statsGrid">{marketStats.slice(0,5).map(([n,l,d])=><div className="stat" key={l}><strong>{n}</strong><span>{l}</span><small>{d}</small></div>)}</div></section>

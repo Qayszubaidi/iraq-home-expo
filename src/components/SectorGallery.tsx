@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {sectors} from "@/data/site";
 
 export default function SectorGallery({slug,title}:{slug:string,title:string}){
@@ -16,10 +17,10 @@ export default function SectorGallery({slug,title}:{slug:string,title:string}){
       <p>The gallery uses Iraq Home Expo&apos;s approved visual library. Sector-specific exhibitor and event photography can replace these references as new material becomes available.</p>
     </div>
     <div className="sectorGalleryGrid">
-      {related.map((item,i)=><figure key={`${item.slug}-${i}`} className={`sectorGalleryItem g${i+1}`}>
-        <Image src={item.image} fill alt={`${item.title} visual reference`} sizes="(max-width: 760px) 100vw, 50vw"/>
-        <figcaption><span>{String(i+1).padStart(2,"0")}</span><strong>{item.title}</strong></figcaption>
-      </figure>)}
+      {related.map((item,i)=><Link href={`/sectors/${item.slug}`} key={`${item.slug}-${i}`} className={`sectorGalleryItem g${i+1}`} aria-label={`Explore ${item.title} exhibition sector`}>
+        <Image src={item.image} fill alt={`${item.title} exhibition sector at Iraq Home Expo 2027`} sizes="(max-width: 760px) 100vw, 50vw"/>
+        <figcaption><span>{String(i+1).padStart(2,"0")}</span><strong>{item.title}</strong><b aria-hidden="true">↗</b></figcaption>
+      </Link>)}
     </div>
   </section>
 }
