@@ -1,5 +1,7 @@
+import { breadcrumbJsonLd } from "@/lib/seo";
 import type {Metadata} from "next";
 import PageHero from "@/components/PageHero";
+import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
 import {SmartForm} from "@/components/Forms";
 import {getPublicSiteSettings} from "@/lib/cms/public";
 import ContactPageTracking from "@/components/ContactPageTracking";
@@ -33,3 +35,5 @@ export default async function Contact(){
     <section className="formSection"><div><span className="eyebrow dark">Our team is ready to help</span><h2>Send us a message.</h2><p>We’ll route your enquiry to the appropriate Iraq Home Expo team.</p></div><SmartForm type="contact"/></section>
   </>;
 }
+
+
