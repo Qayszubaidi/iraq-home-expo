@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import VisualBand from "@/components/VisualBand";
 import VideoFeature from "@/components/VideoFeature";
@@ -5,8 +6,13 @@ import FairShowcase from "@/components/FairShowcase";
 import OpeningCeremony from "@/components/OpeningCeremony";
 import Link from "next/link";
 import {event,sectors,media} from "@/data/site";
-export const metadata={title:"Visit Iraq Home Expo"};
-export default function Visit(){return <><PageHero cmsKey="visit" eyebrow="Visitor Information" title="Visit Iraq Home Expo 2027" copy="Discover products, meet suppliers and connect with companies serving Iraq’s home, interiors and residential markets." image="/assets/visit-hero-new.jpg" imageAlt="Baghdad International Fair and surrounding exhibition grounds in Baghdad" imagePosition="bottom center" primary="Register to Visit" primaryHref="/register/visitor"/>
+export const metadata: Metadata = {
+  title: "Visit Iraq Home Expo 2027 | Baghdad International Fair",
+  description: "Plan your visit to Iraq Home Expo 2027 at Baghdad International Fair, 12–15 May. Discover furniture, interiors and home-industry suppliers in Baghdad, Iraq.",
+  alternates:{canonical:"https://iraqhomeexpo.com/visit"},
+  openGraph:{title:"Visit Iraq Home Expo 2027 | Baghdad International Fair",description:"Plan your visit to Iraq Home Expo 2027 at Baghdad International Fair, 12–15 May. Discover furniture, interiors and home-industry suppliers in Baghdad, Iraq.",url:"https://iraqhomeexpo.com/visit",type:"website"},
+};
+export default function Visit(){return <><PageHero cmsKey="visit" eyebrow="Visitor Information" title="Visit Iraq Home Expo 2027" copy="Discover products, meet suppliers and connect with companies serving Iraq’s home, interiors and residential markets." image="/assets/visit-hero-new.jpg" imageAlt="Baghdad International Fair venue for Iraq Home Expo 2027 in Baghdad, Iraq" imagePosition="bottom center" primary="Register to Visit" primaryHref="/register/visitor"/>
 <OpeningCeremony compact/>
 <section className="infoTriplet">{[["Date",event.dates],["Opening Hours",event.hours],["Venue",`${event.venue} · ${event.city}`]].map(([a,b])=><div key={a}><span>{a}</span><strong>{b}</strong></div>)}</section>
 <FairShowcase compact/>

@@ -13,19 +13,35 @@ import OpeningCeremony from "@/components/OpeningCeremony";
 import CmsHomeHero from "@/components/CmsHomeHero";
 import { event, marketStats, sectors, media } from "@/data/site";
 import { getCmsSectors } from "@/lib/cms/public";
+import type { Metadata } from "next";
+import {organizationJsonLd,websiteJsonLd,eventJsonLd} from "@/lib/seo";
+
+export const metadata:Metadata={
+  title:"Iraq Home Expo 2027 | Iraq International Furniture & Interiors Expo",
+  description:"Iraq Home Expo 2027 is an international furniture, interiors and home industry exhibition at Baghdad International Fair, Iraq, 12–15 May 2027. Meet manufacturers, suppliers, buyers and distributors.",
+  alternates:{canonical:"https://iraqhomeexpo.com"},
+  openGraph:{
+    title:"Iraq Home Expo 2027 | International Furniture & Interiors Expo in Baghdad",
+    description:"Meet international furniture, interiors and home-industry suppliers at Baghdad International Fair, 12–15 May 2027.",
+    url:"https://iraqhomeexpo.com",
+    type:"website",
+    images:[{url:"/assets/hero-interior.webp",alt:"Iraq Home Expo 2027 furniture and interiors exhibition in Baghdad"}]
+  }
+};
 
 export default async function Home() {
   const displaySectors = await getCmsSectors(sectors);
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify([organizationJsonLd,websiteJsonLd,eventJsonLd])}}/>
       <CmsHomeHero />
 
       <section className="institutional">
         <span>Organized by</span>
-        <Image src="/assets/success-steps-logo.webp" width={170} height={70} alt="Success Steps" />
+        <Image src="/assets/success-steps-logo.webp" width={170} height={70} alt="Success Steps exhibition organizer logo" />
         <span>With institutional partners</span>
-        <Image src="/assets/ministry-trade-logo.webp" width={100} height={70} alt="Ministry of Trade" />
-        <Image src="/assets/expo-partner-logo.webp" width={110} height={70} alt="Partner" />
+        <Image src="/assets/ministry-trade-logo.webp" width={100} height={70} alt="Iraq Ministry of Trade institutional partner logo" />
+        <Image src="/assets/expo-partner-logo.webp" width={110} height={70} alt="Iraq Home Expo institutional partner logo" />
       </section>
 
       <SectorTicker />

@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import {SmartForm} from "@/components/Forms";
 import {event} from "@/data/site";
-export const metadata={title:"Exhibitor & Sponsor Registration"};
+export const metadata: Metadata = {
+  title: "Exhibitor Registration | Iraq Home Expo 2027 Baghdad",
+  description: "Register exhibitor or sponsorship interest for Iraq Home Expo 2027 and connect with buyers, distributors and business partners in Iraq.",
+  alternates:{canonical:"https://iraqhomeexpo.com/register/exhibitor"},
+  openGraph:{title:"Exhibitor Registration | Iraq Home Expo 2027 Baghdad",description:"Register exhibitor or sponsorship interest for Iraq Home Expo 2027 and connect with buyers, distributors and business partners in Iraq.",url:"https://iraqhomeexpo.com/register/exhibitor",type:"website"},
+};
 export default function ExhibitorRegistration(){return <section className="standaloneFormPage"><div className="formPageIntro"><span className="eyebrow dark">Exhibitor & Sponsor Registration</span><h1>Choose how your brand will participate in Baghdad.</h1><p>Tell our team about your company, products and participation requirements. Select Exhibitor, Sponsor, or Exhibitor + Sponsor in the form. This is an enquiry and registration form, not an online payment or automatic booking system.</p><div className="formFacts"><span>{event.dates}</span><span>{event.venue}</span><span>{event.city}</span></div><aside><h3>Why participate?</h3><ul><li>Meet professional buyers</li><li>Build brand visibility</li><li>Find distributors and partners</li><li>Develop long-term opportunities</li></ul><p><strong>Need help?</strong><br/>sales@iraqhomeexpo.com<br/>+964 770 255 0297</p></aside></div><div className="formPageCard"><div className="stepBar"><span className="active">1</span><i/> <span>2</span><i/> <span>3</span></div><h2>Company & Participation Information</h2><SmartForm type="exhibitor"/></div></section>}

@@ -4008,3 +4008,13 @@ body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.admin
 .adminLeadDeliveryError{margin-top:14px;background:#fff0ed;border:1px solid #efd1ca;padding:12px;border-radius:6px;color:#87372d;display:grid;gap:4px;font-size:9px}.adminLeadDrawerFooter{padding-top:18px;margin-top:18px;border-top:1px solid #ddd5ca}.adminLeadDrawerFooter button{border:1px solid #a85a50;background:transparent;color:#93473e;border-radius:5px;padding:9px 11px;font:700 9px var(--font-sans);cursor:pointer}
 @media(max-width:900px){.adminLeadMetrics{grid-template-columns:1fr 1fr}.adminLeadFilters{grid-template-columns:1fr 1fr}.adminLeadFilters input{grid-column:1/-1}}
 @media(max-width:560px){.adminLeadMetrics{grid-template-columns:1fr}.adminLeadFilters{grid-template-columns:1fr}.adminLeadFilters input{grid-column:auto}.adminLeadDetailGrid{grid-template-columns:1fr}.adminLeadDetailGrid>div:nth-child(odd){border-right:0}.adminLeadSubmission>div>div{grid-template-columns:1fr;gap:5px}}
+/* Append to globals.css */
+.seoBreadcrumbs{width:min(var(--site-max),calc(100% - (var(--site-gutter)*2)));margin:16px auto 4px;display:flex;flex-wrap:wrap;align-items:center;font-size:12px;line-height:1.5;color:#746d66}
+.seoBreadcrumbItem{display:inline-flex;align-items:center}
+.seoBreadcrumbSep{margin:0 8px;color:#c38f2c}
+.seoBreadcrumbs a{color:#005251;text-decoration:none}
+.seoBreadcrumbs a:hover{text-decoration:underline;text-underline-offset:3px}
+.seoBreadcrumbs strong{font-weight:650;color:#231f20}
+.seoTextLink{color:#005251;font-weight:600;text-decoration:underline;text-decoration-color:rgba(0,82,81,.28);text-underline-offset:3px}
+.seoTextLink:hover{text-decoration-color:#005251}
+@media(max-width:760px){.seoBreadcrumbs{width:calc(100% - 32px);font-size:11px}}

@@ -1,13 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import { event } from "@/data/site";
 
-export const metadata = {
-  title: "Become a Sponsor | Iraq Home Expo 2027",
-  description: "Explore sponsorship opportunities at Iraq Home Expo 2027 in Baghdad.",
+export const metadata: Metadata = {
+  title: "Sponsor Iraq Home Expo 2027 | Exhibition Sponsorship Opportunities",
+  description: "Explore sponsorship opportunities at Iraq Home Expo 2027 and build brand visibility with buyers, distributors and decision-makers in Iraq's home and interiors market.",
+  alternates:{canonical:"https://iraqhomeexpo.com/sponsor"},
+  openGraph:{title:"Sponsor Iraq Home Expo 2027 | Exhibition Sponsorship Opportunities",description:"Explore sponsorship opportunities at Iraq Home Expo 2027 and build brand visibility with buyers, distributors and decision-makers in Iraq's home and interiors market.",url:"https://iraqhomeexpo.com/sponsor",type:"website"},
 };
-
 const benefits = [
   ["01", "Brand Visibility", "Strengthen your brand presence around selected exhibition communications, visitor touchpoints and event experiences."],
   ["02", "Industry Positioning", "Associate your company with Iraq's dedicated international exhibition for home, interiors and residential solutions."],
@@ -23,7 +25,7 @@ export default function SponsorPage() {
       title="Become a Sponsor"
       copy="Put your brand at the center of Iraq Home Expo 2027 and connect with the professional audience shaping Iraq's home and interiors market."
       image="/assets/hero-sponsor-business.webp"
-      imageAlt="Contemporary business meeting environment"
+      imageAlt="Business sponsorship meeting for Iraq Home Expo 2027 in Baghdad"
       imagePosition="bottom center"
       primary="Discuss Sponsorship"
       primaryHref="/register/exhibitor"

@@ -1,0 +1,53 @@
+# Iraq Home Expo 2027
+
+> Official website for Iraq Home Expo 2027, an international exhibition for furniture, interiors, home products and residential solutions in Baghdad, Iraq.
+
+Official website: https://iraqhomeexpo.com
+Event dates: 12–15 May 2027
+Opening hours: 11:00 AM–6:00 PM
+Venue: Baghdad International Fair
+City: Baghdad, Iraq
+
+## About
+
+Iraq Home Expo 2027 connects international manufacturers, suppliers, brands, distributors, buyers and industry professionals across the home, furniture and interiors market in Iraq.
+
+## Primary pages
+
+- Home: https://iraqhomeexpo.com/
+- About: https://iraqhomeexpo.com/about
+- Why Iraq: https://iraqhomeexpo.com/why-iraq
+- Exhibition sectors: https://iraqhomeexpo.com/sectors
+- Visit: https://iraqhomeexpo.com/visit
+- Exhibit: https://iraqhomeexpo.com/exhibit
+- Sponsorship: https://iraqhomeexpo.com/sponsor
+- Visitor registration: https://iraqhomeexpo.com/register/visitor
+- Exhibitor registration: https://iraqhomeexpo.com/register/exhibitor
+- Contact: https://iraqhomeexpo.com/contact
+
+## Exhibition sectors
+
+- Interiors: https://iraqhomeexpo.com/sectors/interiors
+- Furniture & Home Furnishings: https://iraqhomeexpo.com/sectors/furniture-home-furnishings
+- Home Textiles: https://iraqhomeexpo.com/sectors/home-textiles
+- Kitchen: https://iraqhomeexpo.com/sectors/kitchen
+- Bathroom & Cleaning: https://iraqhomeexpo.com/sectors/bathroom-cleaning
+- Lighting & Electrical: https://iraqhomeexpo.com/sectors/lighting-electrical
+- HVAC: https://iraqhomeexpo.com/sectors/hvac
+- Smart Home & Security: https://iraqhomeexpo.com/sectors/smart-home-security
+
+## Contact
+
+General enquiries: info@iraqhomeexpo.com
+Sales & exhibiting: sales@iraqhomeexpo.com
+Phone: +964 782 445 5860
+Phone: +964 770 255 0297
+
+## Crawling guidance
+
+Public website content may be crawled and indexed by search engines and AI discovery systems.
+Private administration routes and private admin APIs are not intended for crawling.
+
+Canonical domain: https://iraqhomeexpo.com
+Sitemap: https://iraqhomeexpo.com/sitemap.xml
+Robots: https://iraqhomeexpo.com/robots.txt
