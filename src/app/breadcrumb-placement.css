@@ -1,0 +1,18 @@
+/* Breadcrumb placement refinement.
+   Pulls page breadcrumbs into the lower portion of the approved inner-page hero,
+   matching the gold/red guide-line location without changing hero structure. */
+.modernPageHero + script + .seoBreadcrumbs,
+.modernPageHero + .seoBreadcrumbs {
+  position: relative;
+  z-index: 3;
+  margin-top: -44px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 760px) {
+  .modernPageHero + script + .seoBreadcrumbs,
+  .modernPageHero + .seoBreadcrumbs {
+    margin-top: -36px;
+    margin-bottom: 16px;
+  }
+}
