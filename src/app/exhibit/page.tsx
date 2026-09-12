@@ -1,6 +1,7 @@
+import SeoJsonLd from "@/components/SeoJsonLd";
 import type { Metadata } from "next";
 import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, pageJsonLd } from "@/lib/seo";
 import PageHero from "@/components/PageHero";
 import VisualBand from "@/components/VisualBand";
 import VideoFeature from "@/components/VideoFeature";
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
   title: "Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",
   description: "Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",
   alternates:{canonical:"https://iraqhomeexpo.com/exhibit"},
-  openGraph:{title:"Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",description:"Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",url:"https://iraqhomeexpo.com/exhibit",type:"website"},
+  openGraph:{title:"Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",description:"Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",url:"https://iraqhomeexpo.com/exhibit",type:"website",images:[{url:"/assets/exhibit-hero-new.jpg",alt:"Furniture and interiors exhibitors meeting professional buyers in Baghdad"}]},
 };
-export default function Exhibit(){return <><PageHero cmsKey="exhibit" eyebrow={`${event.dates} · Baghdad`} title="Exhibit at Iraq Home Expo 2027" copy="Present your products, meet professional buyers and build commercial relationships in Iraq’s developing home and residential market." image="/assets/exhibit-hero-new.jpg" imageAlt="International furniture and interiors exhibitors meeting buyers at Iraq Home Expo 2027" imagePosition="center center" primary="Register as an Exhibitor" primaryHref="/register/exhibitor"/>
+export default function Exhibit(){return <><SeoJsonLd data={pageJsonLd({path:"/exhibit",type:"WebPage",name:"Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",description:"Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",image:"/assets/exhibit-hero-new.jpg",keywords:["exhibit in Iraq", "Iraq trade fair", "Iraq business"]})}/>
+<PageHero cmsKey="exhibit" eyebrow={`${event.dates} · Baghdad`} title="Exhibit at Iraq Home Expo 2027" copy="Present your products, meet professional buyers and build commercial relationships in Iraq’s developing home and residential market." image="/assets/exhibit-hero-new.jpg" imageAlt="International furniture and interiors exhibitors meeting buyers at Iraq Home Expo 2027" imagePosition="center center" primary="Register as an Exhibitor" primaryHref="/register/exhibitor"/>
 <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd([{name:"Iraq Home Expo 2027",path:"/"},{name:"Exhibit in Iraq",path:"/exhibit"}]))}}/>
 <SeoBreadcrumbs items={[{label:"Home",href:"/"},{label:"Exhibit in Iraq"}]}/>
 <ShowcaseConnection/>

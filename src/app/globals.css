@@ -4104,3 +4104,101 @@ body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.admin
   .v4MegaMenu{display:none!important}
   .seoBreadcrumbs{width:calc(100% - 34px)}
 }
+
+/* IHE SEO PHASE 2 */
+/* IHE SEO PHASE 2 — breadcrumb placement, accessibility-compatible captions, admin SEO UI */
+
+/* Pull breadcrumbs into the reserved lower padding of PageHero (the red-line position). */
+.modernPageHero + .seoBreadcrumbs{
+  position:relative;
+  z-index:4;
+  margin-top:-44px!important;
+  margin-bottom:22px!important;
+  padding-top:0;
+  background:transparent;
+}
+@media(max-width:980px){
+  .modernPageHero + .seoBreadcrumbs{margin-top:-30px!important;margin-bottom:18px!important}
+}
+@media(max-width:640px){
+  .modernPageHero + .seoBreadcrumbs{margin-top:-25px!important;margin-bottom:16px!important}
+}
+
+/* Valid semantic captions for linked sector imagery. */
+.sectorGalleryCaption,
+.moodCaption{
+  position:absolute;
+  z-index:3;
+  left:0;
+  right:0;
+  bottom:0;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.sectorGalleryCaption b,
+.moodCaption b{
+  margin-left:auto;
+  color:var(--gold);
+  font-size:16px;
+  font-weight:600;
+  transition:transform .2s ease;
+}
+.sectorGalleryItem:hover .sectorGalleryCaption b,
+.moodGrid>a:hover .moodCaption b{transform:translateX(4px)}
+
+/* Duplicate ticker items remain visual only, never keyboard-focusable. */
+.tickerTrack>.tickerClone{
+  display:flex;
+  align-items:center;
+  gap:34px;
+  padding:16px 24px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-size:10px;
+  white-space:nowrap;
+  font-weight:500;
+}
+.tickerTrack>.tickerClone i{font-style:normal;font-size:11px;color:rgba(255,255,255,.55)}
+@media(max-width:760px){
+  .tickerTrack>.tickerClone{padding:13px 16px;gap:26px;font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.tickerTrack>.tickerClone{display:none}}
+
+/* SEO & Analytics admin dashboard */
+.seoAdminTop{gap:28px}
+.seoAuditButton{border:0;background:var(--admin-teal);color:#fff;padding:12px 18px;border-radius:5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.seoAuditButton:disabled{opacity:.55;cursor:wait}
+.seoMetricGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}
+.seoMetricGrid article{background:#fff;border:1px solid var(--admin-line);padding:22px;min-width:0}
+.seoMetricGrid article>span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#7c736a;font-weight:700;margin-bottom:12px}
+.seoMetricGrid article>strong{display:block;font:650 34px/1 var(--font-display);color:var(--admin-teal);margin-bottom:10px}
+.seoMetricGrid article>strong small{font-size:14px;color:#847b73;margin-left:3px}
+.seoMetricGrid article p{font-size:12px;color:#746c65;margin:0}
+.seoSectionHead{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}
+.seoSectionHead span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:#9a6b16;font-weight:700}
+.seoSectionHead h2{font:600 24px var(--font-display);margin:5px 0 0}
+.seoSectionHead small{font-size:11px;color:#7b736c}
+.seoIntegrationGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.seoIntegrationGrid>div{border:1px solid #e5ddd2;background:#faf8f4;padding:16px;display:grid;gap:7px}
+.seoIntegrationGrid b{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8b7a65}
+.seoIntegrationGrid strong{font-size:14px;color:#064b4a;overflow-wrap:anywhere}
+.seoIntegrationGrid span{font-size:11px;line-height:1.45;color:#726a63}
+.seoTableWrap{overflow:auto;border:1px solid #e5ddd2}
+.seoAuditTable{width:100%;border-collapse:collapse;min-width:920px;background:#fff;font-size:11px}
+.seoAuditTable th{position:sticky;top:0;background:#f6f2eb;text-align:left;padding:11px 10px;border-bottom:1px solid #ded7cc;text-transform:uppercase;letter-spacing:.07em;font-size:9px;color:#6d655e}
+.seoAuditTable td{padding:11px 10px;border-bottom:1px solid #eee8df;vertical-align:top}
+.seoAuditTable td:first-child{min-width:190px}
+.seoAuditTable a{color:#005251;font-weight:700;text-decoration:none}
+.seoAuditTable td small{display:block;margin-top:4px;color:#a33b31}
+.seoAuditTable .ok{color:#1b6e4d;font-weight:700}
+.seoAuditTable .issue{color:#a05f17;font-weight:700}
+.seoScore{display:inline-grid;place-items:center;min-width:38px;height:28px;padding:0 7px;border-radius:4px;font-weight:800}
+.seoScore.good{background:#e7f5ed;color:#17633f}
+.seoScore.warn{background:#fff3dc;color:#9c6418}
+.seoScore.bad{background:#fde8e5;color:#9d3329}
+.seoFileGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.seoFileGrid>div{border:1px solid #e5ddd2;padding:16px;background:#faf8f4;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.seoFileGrid b{font-size:12px}.seoFileGrid strong{font-size:11px;color:#005251;text-align:right}
+@media(max-width:1100px){.seoMetricGrid,.seoIntegrationGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.seoMetricGrid,.seoIntegrationGrid,.seoFileGrid{grid-template-columns:1fr}.seoAuditButton{width:100%}.seoSectionHead{align-items:flex-start;flex-direction:column}}

@@ -1,4 +1,5 @@
-import { breadcrumbJsonLd } from "@/lib/seo";
+import { pageJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+import SeoJsonLd from "@/components/SeoJsonLd";
 import type {Metadata} from "next";
 import PageHero from "@/components/PageHero";
 import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
@@ -14,8 +15,7 @@ export const metadata:Metadata={
     title:"Contact Iraq Home Expo 2027 | Baghdad, Iraq",
     description:"Contact the Iraq Home Expo team for visitor, exhibitor and sponsorship enquiries.",
     url:"https://iraqhomeexpo.com/contact",
-    type:"website"
-  }
+    type:"website",images:[{url:"/assets/build-partnerships.webp",alt:"Iraq Home Expo business team and professional enquiries"}]}
 };
 
 export default async function Contact(){
@@ -28,12 +28,11 @@ export default async function Contact(){
     city=s?.city||"Baghdad, Iraq";
   return <>
     <ContactPageTracking/>
-    <PageHero cmsKey="contact" eyebrow="Get in Touch" title="Contact Iraq Home Expo" copy="Contact our team for visitor enquiries, exhibiting opportunities, registration support and general information." image="/assets/build-partnerships.webp" imageAlt="Iraq Home Expo business team discussing exhibitor and visitor enquiries"/>
+    <SeoJsonLd data={pageJsonLd({path:"/contact",type:"ContactPage",name:"Contact Iraq Home Expo 2027 | Baghdad, Iraq",description:"Contact Iraq Home Expo 2027 for visitor registration, exhibitor opportunities, sponsorship and general enquiries in Baghdad, Iraq.",image:"/assets/build-partnerships.webp",keywords:["Iraq Home Expo contact", "Baghdad exhibition contact"]})}/>
+<PageHero cmsKey="contact" eyebrow="Get in Touch" title="Contact Iraq Home Expo" copy="Contact our team for visitor enquiries, exhibiting opportunities, registration support and general information." image="/assets/build-partnerships.webp" imageAlt="Iraq Home Expo business team discussing exhibitor and visitor enquiries"/>
 <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd([{name:"Iraq Home Expo 2027",path:"/"},{name:"Contact",path:"/contact"}]))}}/>
 <SeoBreadcrumbs items={[{label:"Home",href:"/"},{label:"Contact"}]}/>
     <section className="contactGrid"><div><span>General Enquiries</span><a href={`mailto:${info}`}>{info}</a></div><div><span>Sales & Exhibiting</span><a href={`mailto:${sales}`}>{sales}</a></div><div><span>Phone / WhatsApp</span><a href={`tel:${phone1.replace(/\s/g,"")}`}>{phone1}</a><a href={`tel:${phone2.replace(/\s/g,"")}`}>{phone2}</a></div><div><span>Venue</span><strong>{venue}<br/>{city}</strong></div></section>
     <section className="formSection"><div><span className="eyebrow dark">Our team is ready to help</span><h2>Send us a message.</h2><p>We’ll route your enquiry to the appropriate Iraq Home Expo team.</p></div><SmartForm type="contact"/></section>
   </>;
 }
-
-

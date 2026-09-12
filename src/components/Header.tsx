@@ -33,7 +33,7 @@ export default function Header({cmsSettings}:{cmsSettings?:PublicSiteSettings|nu
     </div>
     <header className={`v4Header ${scrolled?"isScrolled":""}`}>
       <div className="v4HeaderInner">
-        <Link href="/" className="v4Logo" aria-label="Iraq Home Expo home"><Image src="/assets/iraq-home-expo-logo.png" alt="Iraq Home Expo" width={2048} height={635} priority/></Link>
+        <Link href="/" className="v4Logo" aria-label="Iraq Home Expo home"><Image src="/assets/iraq-home-expo-logo.png" alt="Iraq Home Expo 2027 official logo" width={540} height={167} sizes="(max-width: 980px) 220px, 270px" priority/></Link>
         <nav className="v4Nav" aria-label="Primary navigation">
           {nav.map(([label,href])=>label==="Sectors"?<div className="v4MegaWrap" key={href}>
             <Link href={href} className={`v4NavLink v4NavSector ${active(href)?"active":""}`}>{label}<Chevron/></Link>

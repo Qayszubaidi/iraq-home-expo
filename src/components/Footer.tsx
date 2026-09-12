@@ -9,7 +9,7 @@ export default function Footer({cmsSettings}:{cmsSettings?:PublicSiteSettings|nu
   <div className="v4FooterGlow" aria-hidden="true"/>
   <div className="v4FooterGrid">
     <section className="v4FooterBrand">
-      <Link href="/" className="v4FooterLogo"><Image src="/assets/iraq-home-expo-logo-white.png" width={309} height={90} alt="Iraq Home Expo"/></Link>
+      <Link href="/" className="v4FooterLogo"><Image src="/assets/iraq-home-expo-logo-white.png" width={309} height={90} sizes="220px" alt="Iraq Home Expo 2027 official logo"/></Link>
       <p>Iraq Home Expo brings the home, interiors and residential industry together in Baghdad.</p>
       <div className="v4FooterSocial"><a href={site.facebook} target="_blank" rel="noreferrer" aria-label="Facebook"><Social kind="facebook"/></a><a href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Social kind="instagram"/></a></div>
     </section>

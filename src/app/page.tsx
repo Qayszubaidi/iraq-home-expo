@@ -1,3 +1,4 @@
+import SeoJsonLd from "@/components/SeoJsonLd";
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
@@ -14,7 +15,7 @@ import CmsHomeHero from "@/components/CmsHomeHero";
 import { event, marketStats, sectors, media } from "@/data/site";
 import { getCmsSectors } from "@/lib/cms/public";
 import type { Metadata } from "next";
-import {organizationJsonLd,websiteJsonLd,eventJsonLd} from "@/lib/seo";
+import {organizationJsonLd,websiteJsonLd,eventJsonLd,fairVenueJsonLd,pageJsonLd} from "@/lib/seo";
 
 export const metadata:Metadata={
   title:"Iraq Home Expo 2027 | Iraq International Furniture & Interiors Expo",
@@ -33,7 +34,13 @@ export default async function Home() {
   const displaySectors = await getCmsSectors(sectors);
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify([organizationJsonLd,websiteJsonLd,eventJsonLd])}}/>
+      <SeoJsonLd data={[organizationJsonLd,websiteJsonLd,fairVenueJsonLd,eventJsonLd,pageJsonLd({
+        path:"/",
+        name:"Iraq Home Expo 2027 | Iraq International Furniture & Interiors Expo",
+        description:"Iraq Home Expo 2027 is an international furniture, interiors and home industry exhibition at Baghdad International Fair, Iraq, 12–15 May 2027.",
+        image:"/assets/hero-interior.webp",
+        keywords:["Iraq Expo","Iraq International Expo","Iraq International Fair","Iraq furniture exhibition","Iraq interiors exhibition","Iraq business"]
+      })]}/>
       <CmsHomeHero />
 
       <section className="institutional">

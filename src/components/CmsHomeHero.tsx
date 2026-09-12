@@ -14,7 +14,16 @@ export default async function CmsHomeHero() {
   const title = cms?.title || "Iraq's home & interiors market meets here.";
   const copy = cms?.copy || "An international exhibition connecting manufacturers, brands and professional buyers across Iraq's evolving home market.";
   return <section className="hero">
-    <Image src={image} fill priority alt={cms?.heroAlt || "Contemporary interior design"} className="cover heroImage" sizes="100vw" style={{objectPosition: cms?.heroPosition || "center center"}} />
+    <Image
+      src={image}
+      fill
+      priority
+      fetchPriority="high"
+      alt={cms?.heroAlt || "Contemporary furniture and interior design representing Iraq Home Expo 2027 in Baghdad"}
+      className="cover heroImage"
+      sizes="100vw"
+      style={{objectPosition: cms?.heroPosition || "center center"}}
+    />
     <div className="heroGradient"/><div className="heroPattern" aria-hidden="true"/>
     <div className="heroContent"><MaskReveal>
       <div className="heroLabels"><span className="archLabel">{dates}</span><span className="archLabel">{city}</span></div>

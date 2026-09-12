@@ -12,25 +12,20 @@ const items = [
 
 export default function ImageGallery() {
   return (
-    <section className="editorialGallery">
+    <section className="editorialGallery" aria-labelledby="industry-gallery-heading">
       <Reveal className="galleryIntro">
         <span className="eyebrow dark">Inside the home industry</span>
-        <h2 className="displayHeading">Designed to be explored.</h2>
-        <p>
-          A visual journey through the products, spaces and systems shaping modern residential
-          environments.
-        </p>
-        <Link className="textLink" href="/sectors">
-          Explore all sectors <span className="arrow">→</span>
-        </Link>
+        <h2 id="industry-gallery-heading" className="displayHeading">Designed to be explored.</h2>
+        <p>A visual journey through the products, spaces and systems shaping modern residential environments.</p>
+        <Link className="textLink" href="/sectors">Explore all sectors <span className="arrow">→</span></Link>
       </Reveal>
       <div className="galleryMosaic">
         {items.map(([img, title, href], i) => (
           <Reveal key={title} className={`galleryTileWrap tile${i + 1}`}>
             <Link href={href} className="galleryTile">
-              <Image fill src={img} alt={title} sizes="(max-width:768px) 100vw, 50vw" />
-              <div className="galleryShade" />
-              <span className="galleryIndex">{String(i + 1).padStart(2, "0")}</span>
+              <Image fill src={img} alt={`${title} products and solutions at Iraq Home Expo 2027`} sizes="(max-width:768px) calc(100vw - 32px), (max-width:1200px) 42vw, 520px" />
+              <div className="galleryShade" aria-hidden="true" />
+              <span className="galleryIndex" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               <h3>{title}</h3>
             </Link>
           </Reveal>

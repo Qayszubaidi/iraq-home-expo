@@ -8,7 +8,7 @@ export default async function PageHero({
   title,
   copy,
   image = "/assets/hero-interior.webp",
-  imageAlt = "Iraq Home Expo",
+  imageAlt = "Iraq Home Expo 2027 exhibition in Baghdad, Iraq",
   primary = "Register",
   primaryHref = "/register",
   compact = false,
@@ -49,7 +49,14 @@ export default async function PageHero({
           </Link>
         </div>
         <div className="modernPageHeroMedia" style={{ "--hero-object-position": hero.imagePosition } as CSSProperties}>
-          <Image src={hero.image} fill priority alt={hero.imageAlt} sizes="(max-width: 900px) 100vw, 58vw" />
+          <Image
+            src={hero.image}
+            fill
+            priority
+            fetchPriority="high"
+            alt={hero.imageAlt}
+            sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 980px) calc(100vw - 40px), 58vw"
+          />
           <div className="modernPageHeroMediaShade" aria-hidden="true" />
           <div className="modernPageHeroArch" aria-hidden="true" />
           <span className="modernPageHeroIndex" aria-hidden="true">Iraq Home Expo · 2027</span>

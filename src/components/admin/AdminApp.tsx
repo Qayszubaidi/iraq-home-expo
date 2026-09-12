@@ -5,7 +5,8 @@ import { adminRest, getSession, signOut, uploadMedia } from "@/lib/cms/adminClie
 import { pageDefinitions, sectorDefinitions } from "@/lib/cms/adminConfig";
 import { sectors as codeSectors } from "@/data/site";
 
-type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms"|"leads"|"ai";
+import SeoDashboard from "@/components/admin/SeoDashboard";
+type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms"|"leads"|"seo"|"ai";
 type Json = Record<string, any>;
 
 const emptyPage = {eyebrow:"",title:"",copy:"",heroImage:"",heroAlt:"",heroPosition:"center center",primary:"",primaryHref:"",seoTitle:"",seoDescription:""};
@@ -122,7 +123,8 @@ export default function AdminApp(){
    ["settings","Site Settings","05"],
    ["forms","Forms","06"],
    ["leads","Leads","07"],
-   ["ai","AI Assistant","08"]
+   ["seo","SEO & Analytics","08"],
+   ["ai","AI Assistant","09"]
  ];
  const activeLabel=nav.find(([k])=>k===tab)?.[1]||"Dashboard";
  return <div className="adminShell">
@@ -152,6 +154,7 @@ export default function AdminApp(){
        {tab==="settings"&&<SettingsEditor onNotice={setNotice}/>}
        {tab==="forms"&&<FormsEditor onNotice={setNotice}/>}
        {tab==="leads"&&<LeadsEditor onNotice={setNotice}/>}
+       {tab==="seo"&&<SeoDashboard/>}
        {tab==="ai"&&<AiAssistant onNotice={setNotice}/>}
      </div>
    </main>
