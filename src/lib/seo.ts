@@ -1,5 +1,5 @@
 export const SITE_URL = "https://iraqhomeexpo.com";
-export const SITE_NAME = "Iraq Home Expo 2027";
+export const SITE_NAME = "Iraq Home Expo";
 
 export const iraqEntity = {
   "@type":"Country",
@@ -43,7 +43,7 @@ export const websiteJsonLd = {
   "@type":"WebSite",
   "@id":`${SITE_URL}/#website`,
   name:SITE_NAME,
-  alternateName:["Iraq Home Expo","Iraq Expo"],
+  alternateName:["Iraq Home Expo 2027","Iraq Expo","iraqhomeexpo.com"],
   url:SITE_URL,
   publisher:{"@id":`${SITE_URL}/#organization`},
   inLanguage:"en"

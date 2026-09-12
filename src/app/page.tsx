@@ -18,10 +18,12 @@ import type { Metadata } from "next";
 import {organizationJsonLd,websiteJsonLd,eventJsonLd,fairVenueJsonLd,pageJsonLd} from "@/lib/seo";
 
 export const metadata:Metadata={
+  applicationName:"Iraq Home Expo",
   title:"Iraq Home Expo 2027 | Iraq International Furniture & Interiors Expo",
   description:"Iraq Home Expo 2027 is an international furniture, interiors and home industry exhibition at Baghdad International Fair, Iraq, 12–15 May 2027. Meet manufacturers, suppliers, buyers and distributors.",
   alternates:{canonical:"https://iraqhomeexpo.com"},
   openGraph:{
+    siteName:"Iraq Home Expo",
     title:"Iraq Home Expo 2027 | International Furniture & Interiors Expo in Baghdad",
     description:"Meet international furniture, interiors and home-industry suppliers at Baghdad International Fair, 12–15 May 2027.",
     url:"https://iraqhomeexpo.com",

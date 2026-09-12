@@ -1,7 +1,7 @@
 "use client";
 
 import {useEffect,useMemo,useState} from "react";
-import {getSession} from "@/lib/cms/adminClient";
+import {getAdminAccessToken} from "@/lib/cms/adminClient";
 
 type AuditPage={
   path:string;status:number;score:number;title?:string;description?:string;canonical?:string;h1Count?:number;schemaCount?:number;imageCount?:number;missingAlt?:number;emptyAlt?:number;genericAlt?:number;internalLinks?:number;checks?:Record<string,boolean>;error?:string;
@@ -32,16 +32,15 @@ export default function SeoDashboard(){
   const [error,setError]=useState("");
   const [gscError,setGscError]=useState("");
 
-  function authHeaders(){
-    const session=getSession();
-    if(!session?.access_token) throw new Error("Admin session is missing.");
-    return {Authorization:`Bearer ${session.access_token}`};
+  async function authHeaders(){
+    const accessToken=await getAdminAccessToken();
+    return {Authorization:`Bearer ${accessToken}`};
   }
 
   async function run(){
     setBusy(true);setError("");
     try{
-      const res=await fetch("/api/admin/seo-audit",{headers:authHeaders(),cache:"no-store"});
+      const res=await fetch("/api/admin/seo-audit",{headers:await authHeaders(),cache:"no-store"});
       const body=await res.json();
       if(!res.ok) throw new Error(body?.error||"SEO audit failed.");
       setAudit(body);
@@ -51,7 +50,7 @@ export default function SeoDashboard(){
   async function loadGsc(){
     setGscBusy(true);setGscError("");
     try{
-      const res=await fetch("/api/admin/google-search-console/data",{headers:authHeaders(),cache:"no-store"});
+      const res=await fetch("/api/admin/google-search-console/data",{headers:await authHeaders(),cache:"no-store"});
       const body=await res.json();
       if(!res.ok) throw new Error(body?.error||"Unable to load Search Console.");
       setGsc(body);
@@ -61,7 +60,7 @@ export default function SeoDashboard(){
   async function connectGsc(){
     setGscBusy(true);setGscError("");
     try{
-      const res=await fetch("/api/admin/google-search-console/connect",{headers:authHeaders(),cache:"no-store"});
+      const res=await fetch("/api/admin/google-search-console/connect",{headers:await authHeaders(),cache:"no-store"});
       const body=await res.json();
       if(!res.ok||!body?.url) throw new Error(body?.error||"Unable to start Google authorization.");
       window.location.assign(body.url);
@@ -72,7 +71,7 @@ export default function SeoDashboard(){
     if(!window.confirm("Disconnect Google Search Console from this admin dashboard?")) return;
     setGscBusy(true);setGscError("");
     try{
-      const res=await fetch("/api/admin/google-search-console/disconnect",{method:"DELETE",headers:authHeaders()});
+      const res=await fetch("/api/admin/google-search-console/disconnect",{method:"DELETE",headers:await authHeaders()});
       const body=await res.json();
       if(!res.ok) throw new Error(body?.error||"Unable to disconnect Search Console.");
       setGsc({ok:true,connected:false});

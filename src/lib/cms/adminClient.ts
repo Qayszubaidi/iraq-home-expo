@@ -61,6 +61,11 @@ async function authSession() {
   return session;
 }
 
+export async function getAdminAccessToken() {
+  const session = await authSession();
+  return session.access_token;
+}
+
 export async function adminRest<T>(path: string, init: RequestInit = {}): Promise<T> {
   const session = await authSession();
   const response = await fetch(`${baseUrl}/rest/v1/${path}`, {

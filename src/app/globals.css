@@ -4221,3 +4221,84 @@ body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.admin
 @media(max-width:1100px){.gscMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.gscConnectionLine{grid-template-columns:1fr}}
 @media(max-width:640px){.gscMetricGrid{grid-template-columns:1fr}}
 
+
+
+/* IHE UI + GSC SESSION + SITE NAME FIX 2026-09-12 */
+/* Breadcrumbs: pull the existing breadcrumb row into PageHero's beige lower padding.
+   This does not depend on adjacent siblings, so JSON-LD/script nodes cannot break it. */
+.seoBreadcrumbs{
+  position:relative!important;
+  z-index:8!important;
+  margin-top:-46px!important;
+  margin-bottom:32px!important;
+  padding-top:0!important;
+  padding-bottom:0!important;
+  background:transparent!important;
+}
+@media(max-width:980px){
+  .seoBreadcrumbs{margin-top:-30px!important;margin-bottom:24px!important}
+}
+@media(max-width:640px){
+  .seoBreadcrumbs{margin-top:-26px!important;margin-bottom:22px!important}
+}
+
+/* Sector-page linked image cards: restore the approved Related Sectors caption language
+   while keeping the entire card as one accessible link. */
+.sectorGalleryItem::after{
+  background:linear-gradient(0deg,rgba(0,31,30,.80) 0%,rgba(0,31,30,.18) 50%,transparent 70%)!important;
+}
+.sectorGalleryCaption{
+  left:22px!important;
+  right:22px!important;
+  bottom:22px!important;
+  color:#fff!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  gap:16px!important;
+}
+.sectorGalleryCaption>span{display:none!important}
+.sectorGalleryCaption strong{
+  font-family:var(--font-display),"Montserrat",sans-serif!important;
+  font-size:clamp(21px,1.7vw,29px)!important;
+  line-height:1.02!important;
+  font-weight:700!important;
+  letter-spacing:-.025em!important;
+  color:#fff!important;
+}
+.sectorGalleryCaption b{
+  margin-left:auto!important;
+  color:var(--gold)!important;
+  font-size:22px!important;
+  line-height:1!important;
+  font-weight:600!important;
+}
+.sectorGalleryItem:hover .sectorGalleryCaption b{transform:translate(3px,-2px)!important}
+
+.moodCaption{
+  left:22px!important;
+  right:22px!important;
+  bottom:20px!important;
+  color:#fff!important;
+  font-family:var(--font-display),"Montserrat",sans-serif!important;
+  font-size:clamp(20px,1.5vw,26px)!important;
+  line-height:1.05!important;
+  font-weight:700!important;
+  letter-spacing:-.02em!important;
+  display:flex!important;
+  align-items:flex-end!important;
+  gap:14px!important;
+}
+.moodCaption>span{display:none!important}
+.moodCaption b{
+  margin-left:auto!important;
+  color:var(--gold)!important;
+  font-size:21px!important;
+  line-height:1!important;
+}
+.sectorGalleryItem:focus-visible,.moodGrid>a:focus-visible{outline:3px solid var(--gold)!important;outline-offset:3px!important}
+@media(max-width:760px){
+  .sectorGalleryCaption{left:18px!important;right:18px!important;bottom:18px!important}
+  .sectorGalleryCaption strong{font-size:23px!important}
+  .sectorGalleryCaption b{font-size:20px!important}
+  .moodCaption{left:18px!important;right:18px!important;bottom:18px!important;font-size:22px!important}
+}
