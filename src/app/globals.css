@@ -4202,3 +4202,22 @@ body:has(.adminShell) .v4Utility,body:has(.adminShell) .v4Header,body:has(.admin
 .seoFileGrid b{font-size:12px}.seoFileGrid strong{font-size:11px;color:#005251;text-align:right}
 @media(max-width:1100px){.seoMetricGrid,.seoIntegrationGrid{grid-template-columns:1fr 1fr}}
 @media(max-width:720px){.seoMetricGrid,.seoIntegrationGrid,.seoFileGrid{grid-template-columns:1fr}.seoAuditButton{width:100%}.seoSectionHead{align-items:flex-start;flex-direction:column}}
+
+
+/* IHE GOOGLE SEARCH CONSOLE CONNECTION */
+.gscActions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.gscDisconnect{border:1px solid rgba(35,31,32,.18);background:#fff;color:#6c2f2f;padding:11px 15px;border-radius:8px;font-weight:700;cursor:pointer}
+.gscEmpty{padding:22px;border:1px dashed rgba(0,82,81,.25);background:#fbfaf7;border-radius:12px}
+.gscEmpty strong{display:block;color:#005251;margin-bottom:5px}
+.gscEmpty p{margin:0;color:#6f6862;max-width:760px}
+.gscConnectionLine{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:14px 0 20px;color:#6f6862}
+.gscConnectionLine strong{color:#231f20;word-break:break-word}
+.gscMetricGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.gscMetricGrid article{padding:18px;border:1px solid rgba(35,31,32,.1);border-radius:12px;background:#fff}
+.gscMetricGrid span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#746d66;margin-bottom:8px}
+.gscMetricGrid strong{font-size:28px;color:#231f20}
+.gscKeywordBlock{margin-top:12px}
+.gscKeywordBlock h3{margin:3px 0 0;font-size:22px}
+@media(max-width:1100px){.gscMetricGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.gscConnectionLine{grid-template-columns:1fr}}
+@media(max-width:640px){.gscMetricGrid{grid-template-columns:1fr}}
+
