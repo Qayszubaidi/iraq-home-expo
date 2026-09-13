@@ -8,7 +8,7 @@ import {getPublicSiteSettings} from "@/lib/cms/public";
 import ContactPageTracking from "@/components/ContactPageTracking";
 
 export const metadata:Metadata={
-  title:"Contact Iraq Home Expo 2027 | Baghdad, Iraq",
+  title:"Contact Iraq Home Expo",
   description:"Contact Iraq Home Expo 2027 for visitor registration, exhibitor opportunities, sponsorship and general enquiries in Baghdad, Iraq.",
   alternates:{canonical:"https://iraqhomeexpo.com/contact"},
   openGraph:{

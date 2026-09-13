@@ -4,7 +4,7 @@ import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
 import { breadcrumbJsonLd, sectorsCollectionJsonLd } from "@/lib/seo";
 import PageHero from "@/components/PageHero"; import Image from "next/image"; import Link from "next/link"; import {sectors} from "@/data/site"; import {getCmsSectors} from "@/lib/cms/public";
 export const metadata: Metadata = {
-  title: "Iraq Exhibition Sectors | Furniture, Interiors & Home Expo 2027",
+  title: "Exhibition Sectors",
   description: "Explore Iraq Home Expo 2027 exhibition sectors including furniture, interiors, home textiles, kitchen, bathroom, lighting, HVAC and smart-home solutions.",
   alternates:{canonical:"https://iraqhomeexpo.com/sectors"},
   openGraph:{title:"Iraq Exhibition Sectors | Furniture, Interiors & Home Expo 2027",description:"Explore Iraq Home Expo 2027 exhibition sectors including furniture, interiors, home textiles, kitchen, bathroom, lighting, HVAC and smart-home solutions.",url:"https://iraqhomeexpo.com/sectors",type:"website"},

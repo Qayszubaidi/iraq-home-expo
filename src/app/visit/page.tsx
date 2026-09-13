@@ -10,7 +10,7 @@ import OpeningCeremony from "@/components/OpeningCeremony";
 import Link from "next/link";
 import {event,sectors,media} from "@/data/site";
 export const metadata: Metadata = {
-  title: "Visit Iraq Home Expo 2027 | Baghdad International Fair",
+  title: "Visit Iraq Home Expo",
   description: "Plan your visit to Iraq Home Expo 2027 at Baghdad International Fair, 12–15 May. Discover furniture, interiors and home-industry suppliers in Baghdad, Iraq.",
   alternates:{canonical:"https://iraqhomeexpo.com/visit"},
   openGraph:{title:"Visit Iraq Home Expo 2027 | Baghdad International Fair",description:"Plan your visit to Iraq Home Expo 2027 at Baghdad International Fair, 12–15 May. Discover furniture, interiors and home-industry suppliers in Baghdad, Iraq.",url:"https://iraqhomeexpo.com/visit",type:"website",images:[{url:"/assets/visit-hero-new.jpg",alt:"Baghdad International Fair venue for Iraq Home Expo 2027"}]},

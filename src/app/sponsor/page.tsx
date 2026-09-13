@@ -8,7 +8,7 @@ import Reveal from "@/components/Reveal";
 import { event } from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "Sponsor Iraq Home Expo 2027 | Exhibition Sponsorship Opportunities",
+  title: "Sponsorship Opportunities",
   description: "Explore sponsorship opportunities at Iraq Home Expo 2027 and build brand visibility with buyers, distributors and decision-makers in Iraq's home and interiors market.",
   alternates:{canonical:"https://iraqhomeexpo.com/sponsor"},
   openGraph:{title:"Sponsor Iraq Home Expo 2027 | Exhibition Sponsorship Opportunities",description:"Explore sponsorship opportunities at Iraq Home Expo 2027 and build brand visibility with buyers, distributors and decision-makers in Iraq's home and interiors market.",url:"https://iraqhomeexpo.com/sponsor",type:"website",images:[{url:"/assets/hero-sponsor-business.webp",alt:"Business sponsorship meeting for Iraq Home Expo 2027"}]},

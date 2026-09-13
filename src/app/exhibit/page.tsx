@@ -9,7 +9,7 @@ import Link from "next/link";
 import ShowcaseConnection from "@/components/ShowcaseConnection";
 import {marketStats,sectors,event,media} from "@/data/site";
 export const metadata: Metadata = {
-  title: "Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",
+  title: "Exhibit at Iraq Home Expo",
   description: "Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",
   alternates:{canonical:"https://iraqhomeexpo.com/exhibit"},
   openGraph:{title:"Exhibit at Iraq Home Expo 2027 | Reach Buyers & Distributors in Iraq",description:"Exhibit at Iraq Home Expo 2027 in Baghdad. Meet Iraqi buyers, distributors, retailers and industry professionals seeking furniture, interiors and home products.",url:"https://iraqhomeexpo.com/exhibit",type:"website",images:[{url:"/assets/exhibit-hero-new.jpg",alt:"Furniture and interiors exhibitors meeting professional buyers in Baghdad"}]},

@@ -12,7 +12,7 @@ import Link from "next/link";
 import {media} from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "About Iraq Home Expo 2027 | International Exhibition in Baghdad",
+  title: "About the Exhibition",
   description: "Learn about Iraq Home Expo 2027, an international furniture, interiors and home-industry exhibition connecting global suppliers with buyers and business opportunities in Iraq.",
   alternates:{canonical:"https://iraqhomeexpo.com/about"},
   openGraph:{title:"About Iraq Home Expo 2027 | International Exhibition in Baghdad",description:"Learn about Iraq Home Expo 2027, an international furniture, interiors and home-industry exhibition connecting global suppliers with buyers and business opportunities in Iraq.",url:"https://iraqhomeexpo.com/about",type:"website",images:[{url:"/assets/hero-about-expo-generated.png",alt:"Furniture and interiors exhibition environment for Iraq Home Expo 2027"}]},

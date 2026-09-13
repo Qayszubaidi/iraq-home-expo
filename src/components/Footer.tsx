@@ -13,7 +13,7 @@ export default function Footer({cmsSettings}:{cmsSettings?:PublicSiteSettings|nu
       <p>Iraq Home Expo brings the home, interiors and residential industry together in Baghdad.</p>
       <div className="v4FooterSocial"><a href={site.facebook} target="_blank" rel="noreferrer" aria-label="Facebook"><Social kind="facebook"/></a><a href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Social kind="instagram"/></a></div>
     </section>
-    <section className="v4FooterCol"><h3>Quick Links</h3><Link href="/about">About</Link><Link href="/why-iraq">Why Iraq</Link><Link href="/visit">Visit</Link><Link href="/exhibit">Exhibit</Link><Link href="/sponsor">Sponsor</Link><Link href="/contact">Contact</Link></section>
+    <section className="v4FooterCol"><h3>Quick Links</h3><Link href="/about">About</Link><Link href="/sectors">Sectors</Link><Link href="/why-iraq">Why Iraq</Link><Link href="/visit">Visit</Link><Link href="/exhibit">Exhibit</Link><Link href="/sponsor">Sponsor</Link><Link href="/contact">Contact</Link></section>
     <section className="v4FooterCol"><h3>Exhibition Sectors</h3>{sectors.slice(0,6).map(s=><Link href={`/sectors/${s.slug}`} key={s.slug}>{s.title}</Link>)}</section>
     <section className="v4FooterContact"><h3>Contact & Location</h3><div className="v4EventCard"><span>Event</span><strong>{site.dates}</strong><small>{site.venue}<br/>{site.city}</small></div><a href={`mailto:${site.infoEmail}`}>{site.infoEmail}</a><a href={`mailto:${site.salesEmail}`}>{site.salesEmail}</a><a href={`tel:${site.phone1.replace(/\s/g,"")}`}>{site.phone1}</a><a href={`tel:${site.phone2.replace(/\s/g,"")}`}>{site.phone2}</a></section>
   </div>
