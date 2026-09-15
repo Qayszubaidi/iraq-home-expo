@@ -5,7 +5,7 @@ import { breadcrumbJsonLd, pageJsonLd } from "@/lib/seo";
 import PageHero from "@/components/PageHero";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Iraq Home Expo 2027",
+  title: "Privacy Policy",
   description:
     "Privacy policy for Iraq Home Expo website visitors, registration enquiries, analytics and the Google Search Console integration used in the private admin dashboard.",
   alternates: { canonical: "https://iraqhomeexpo.com/privacy" },

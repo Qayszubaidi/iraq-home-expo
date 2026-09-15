@@ -5,7 +5,7 @@ import { breadcrumbJsonLd, pageJsonLd } from "@/lib/seo";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 export const metadata: Metadata = {
-  title: "Register for Iraq Home Expo 2027 | Visitor & Exhibitor Registration",
+  title: "Visitor & Exhibitor Registration",
   description: "Register for Iraq Home Expo 2027 in Baghdad. Choose visitor registration or submit an exhibitor and sponsorship enquiry.",
   alternates:{canonical:"https://iraqhomeexpo.com/register"},
   openGraph:{title:"Register for Iraq Home Expo 2027 | Visitor & Exhibitor Registration",description:"Register for Iraq Home Expo 2027 in Baghdad. Choose visitor registration or submit an exhibitor and sponsorship enquiry.",url:"https://iraqhomeexpo.com/register",type:"website",images:[{url:"/assets/expo-event.webp",alt:"Professional exhibition audience at Iraq Home Expo in Baghdad"}]},
