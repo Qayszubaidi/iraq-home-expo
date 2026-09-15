@@ -1679,6 +1679,13 @@ p {
   padding: 1px;
 }
 
+.statsSource {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #8a8478;
+  padding: 10px 7vw 40px;
+}
+
 .bigStat {
   background: #fff;
   padding: 60px 7vw;
