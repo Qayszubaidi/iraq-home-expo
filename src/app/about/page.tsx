@@ -1,3 +1,4 @@
+import "../visit-about.css";
 import SeoJsonLd from "@/components/SeoJsonLd";
 import type { Metadata } from "next";
 import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
@@ -5,26 +6,135 @@ import { breadcrumbJsonLd, pageJsonLd } from "@/lib/seo";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
 import VideoFeature from "@/components/VideoFeature";
-import VisualBand from "@/components/VisualBand";
 import ImageGallery from "@/components/ImageGallery";
 import FairShowcase from "@/components/FairShowcase";
 import Link from "next/link";
-import {media} from "@/data/site";
+import {media,sectors} from "@/data/site";
 
 export const metadata: Metadata = {
-  title: "About the Exhibition",
-  description: "Learn about Iraq Home Expo 2027, an international furniture, interiors and home-industry exhibition connecting global suppliers with buyers and business opportunities in Iraq.",
+  title: "About Iraq Home Expo",
+  description: "Learn about Iraq Home Expo 2027, an international exhibition in Baghdad for furniture, interiors, home products and residential solutions at Baghdad International Fair.",
   alternates:{canonical:"https://iraqhomeexpo.com/about"},
-  openGraph:{title:"About Iraq Home Expo 2027 | International Exhibition in Baghdad",description:"Learn about Iraq Home Expo 2027, an international furniture, interiors and home-industry exhibition connecting global suppliers with buyers and business opportunities in Iraq.",url:"https://iraqhomeexpo.com/about",type:"website",images:[{url:"/assets/hero-about-expo-generated.png",alt:"Furniture and interiors exhibition environment for Iraq Home Expo 2027"}]},
+  openGraph:{
+    title:"About Iraq Home Expo 2027 | International Exhibition in Baghdad",
+    description:"Iraq Home Expo 2027 connects international suppliers with buyers, developers, designers and business opportunities across Iraq's furniture, interiors and home products market.",
+    url:"https://iraqhomeexpo.com/about",
+    type:"website",
+    images:[{url:"/assets/hero-about-expo-generated.png",alt:"Furniture and interiors exhibition environment for Iraq Home Expo 2027"}]
+  },
 };
-export default function About(){return <><SeoJsonLd data={pageJsonLd({path:"/about",type:"AboutPage",name:"About Iraq Home Expo 2027 | International Exhibition in Baghdad",description:"Learn about Iraq Home Expo 2027, an international furniture, interiors and home-industry exhibition connecting global suppliers with buyers and business opportunities in Iraq.",image:"/assets/hero-about-expo-generated.png",keywords:["Iraq exhibition", "international exhibition Baghdad", "Iraq business"]})}/>
-<PageHero cmsKey="about" eyebrow="Iraq Home Expo 2027" title="Connecting the global home industry with opportunities in Iraq" copy="An international exhibition dedicated to products, technologies and solutions for the modern home." image="/assets/hero-about-expo-generated.png" imageAlt="Contemporary furniture and interiors exhibition hall with professional visitors and business meetings"/>
-<script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd([{name:"Iraq Home Expo 2027",path:"/"},{name:"About Iraq Home Expo",path:"/about"}]))}}/>
-<SeoBreadcrumbs items={[{label:"Home",href:"/"},{label:"About Iraq Home Expo"}]}/>
-<section className="contentSplit"><Reveal><span className="eyebrow dark">About the exhibition</span><h2>A business platform for the home industry.</h2></Reveal><Reveal><p>Iraq Home Expo creates a focused meeting point for manufacturers and suppliers seeking to enter or expand within Iraq while giving professional buyers direct access to products, technologies and industry developments.</p><p>From furniture and interiors to kitchens, electrical systems, HVAC, smart technologies and security solutions, the complete home industry comes together under one roof.</p></Reveal></section>
-<section className="featureGrid">{[["Showcase products & solutions","Present your products directly to buyers, distributors and professionals."],["Meet industry decision-makers","Connect with importers, wholesalers, retailers, designers and purchasing specialists."],["Develop business partnerships","Establish relationships with distributors, agents, customers and long-term partners."],["Explore the Iraqi market","Understand demand and identify opportunities across Iraq’s developing home sectors."]].map(([h,p])=><Reveal key={h} className="feature"><h3>{h}</h3><p>{p}</p></Reveal>)}</section>
-<FairShowcase compact/>
-<VisualBand image="/assets/build-partnerships.webp" eyebrow="International supply · Iraqi demand" title="A meeting place built around business." copy="Iraq Home Expo is designed to move conversations from product discovery to sourcing, distribution and long-term commercial relationships." href="/exhibit" label="Exhibit with Us"/>
-<ImageGallery/>
-<VideoFeature title="Success Steps — organizer achievements" copy="A visual archive of Success Steps projects, exhibition footage and organizer achievements. The current placeholder opens the official YouTube channel until the final showreel URL is selected." channelUrl={media.organizerYoutube}/>
-<section className="finalCta"><div><span className="eyebrow">12–15 May 2027 · Baghdad</span><h2>Be part of Iraq Home Expo 2027.</h2></div><div><Link className="button gold" href="/register/visitor">Register to Visit ↗</Link><Link className="button ghost" href="/exhibit">Exhibit with Us ↗</Link><Link className="button ghost" href="/sponsor">Become a Sponsor ↗</Link></div></section></>}
+
+const businessGroups = [
+  ["International suppliers","Present products to professional buyers, explore routes into the Iraqi market and meet potential distributors, agents and commercial partners."],
+  ["Iraqi buyers and specifiers","Compare products, meet suppliers directly and discover solutions for residential, retail, hospitality and development projects."],
+  ["Industry professionals","Connect with developers, engineering firms, interior designers, procurement specialists and other professionals involved in shaping homes and residential projects in Iraq."],
+] as const;
+
+const professionalAudience = [
+  "Residential complex owners",
+  "Real estate developers",
+  "Engineering firms",
+  "Interior designers",
+  "Procurement specialists",
+  "Importers",
+  "Wholesalers",
+  "Retailers",
+] as const;
+
+export default function About(){
+  return <>
+    <SeoJsonLd data={pageJsonLd({
+      path:"/about",
+      type:"AboutPage",
+      name:"About Iraq Home Expo 2027 | International Exhibition in Baghdad",
+      description:"Iraq Home Expo 2027 is an international exhibition in Baghdad for furniture, interiors, home products and residential solutions, connecting global suppliers with professional buyers in Iraq.",
+      image:"/assets/hero-about-expo-generated.png",
+      keywords:["Iraq Home Expo","Iraq Expo","Iraq International Expo","Iraq International Fair","Baghdad International Fair","furniture exhibition Iraq","interiors exhibition Iraq","home products exhibition Iraq","international exhibition Baghdad"]
+    })}/>
+
+    <PageHero
+      cmsKey="about"
+      eyebrow="Iraq Home Expo 2027"
+      title="Where the global home industry meets Iraq"
+      copy="An international exhibition in Baghdad connecting furniture, interiors and home product suppliers with professional buyers and business opportunities in Iraq."
+      image="/assets/hero-about-expo-generated.png"
+      imageAlt="Contemporary furniture and interiors exhibition hall with professional visitors and business meetings"
+    />
+
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{__html:JSON.stringify(breadcrumbJsonLd([
+        {name:"Iraq Home Expo 2027",path:"/"},
+        {name:"About Iraq Home Expo",path:"/about"}
+      ]))}}
+    />
+    <SeoBreadcrumbs items={[{label:"Home",href:"/"},{label:"About Iraq Home Expo"}]}/>
+
+    <section className="aboutStory">
+      <Reveal className="aboutStoryTitle">
+        <span className="eyebrow dark">About the exhibition</span>
+        <h2>An international home exhibition in Baghdad built around real business.</h2>
+      </Reveal>
+      <Reveal className="aboutStoryCopy">
+        <p>Iraq Home Expo 2027 brings the home industry together at Baghdad International Fair from 12 to 15 May 2027. The exhibition covers furniture, interiors, home textiles, kitchen products, bathroom solutions, lighting, electrical systems, HVAC, smart technology, safety and security.</p>
+        <p>The purpose is simple. Give international manufacturers and suppliers a direct way to meet people who are actively buying, specifying and developing projects in Iraq, while giving Iraqi professionals a focused place to compare products and build relationships with suppliers.</p>
+        <p>For companies looking at Iraq as an export market, the exhibition creates a practical meeting point where product discovery can lead to distribution conversations, sourcing opportunities and future commercial partnerships.</p>
+      </Reveal>
+    </section>
+
+    <section className="aboutBusiness">
+      <div className="aboutSectionHead">
+        <span className="eyebrow dark">Built for business</span>
+        <h2>Connecting international supply with professional demand in Iraq.</h2>
+      </div>
+      <div className="aboutBusinessGrid">
+        {businessGroups.map(([title,copy],i)=><Reveal key={title} className="aboutBusinessCard"><span>{String(i+1).padStart(2,"0")}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}
+      </div>
+    </section>
+
+    <section className="aboutConnections">
+      <div>
+        <span className="eyebrow dark">Who the exhibition connects</span>
+        <h2>Meet the people behind purchasing, projects and market growth.</h2>
+        <p>The original exhibition concept was built around connecting suppliers with active buyers and decision makers in Iraq. That includes companies developing residential projects as well as professionals responsible for sourcing, design and purchasing.</p>
+      </div>
+      <div className="aboutAudienceTags">
+        {professionalAudience.map((item,i)=><span key={item}><b>{String(i+1).padStart(2,"0")}</b>{item}</span>)}
+      </div>
+    </section>
+
+    <section className="aboutSectors">
+      <div className="aboutSectorsIntro">
+        <span className="eyebrow dark">Exhibition sectors</span>
+        <h2>Furniture, interiors and home products in one exhibition.</h2>
+        <p>Iraq Home Expo brings together eight focused sectors so visitors can move from furniture and finishes to kitchen, bathroom, lighting, climate systems and connected home technology without leaving the exhibition.</p>
+        <Link className="textLink" href="/sectors">Explore all exhibition sectors <span>→</span></Link>
+      </div>
+      <div className="aboutSectorLinks">
+        {sectors.map((sector,i)=><Link key={sector.slug} href={`/sectors/${sector.slug}`}><span>{String(i+1).padStart(2,"0")}</span><strong>{sector.title}</strong><b>↗</b></Link>)}
+      </div>
+    </section>
+
+    <FairShowcase compact/>
+
+    <ImageGallery/>
+
+    <VideoFeature
+      title="See the experience behind Success Steps exhibitions"
+      copy="Explore previous Success Steps events and see the exhibition atmosphere, professional audience and organizer experience behind Iraq Home Expo 2027."
+      channelUrl={media.organizerYoutube}
+    />
+
+    <section className="finalCta">
+      <div>
+        <span className="eyebrow">12 to 15 May 2027, Baghdad</span>
+        <h2>Be part of Iraq Home Expo 2027.</h2>
+      </div>
+      <div>
+        <Link className="button gold" href="/register/visitor">Register to Visit ↗</Link>
+        <Link className="button ghost" href="/exhibit">Exhibit with Us ↗</Link>
+        <Link className="button ghost" href="/sponsor">Become a Sponsor ↗</Link>
+      </div>
+    </section>
+  </>
+}
