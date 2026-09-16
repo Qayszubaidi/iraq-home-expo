@@ -1,3 +1,4 @@
+import "../visit-about.css";
 import SeoJsonLd from "@/components/SeoJsonLd";
 import type { Metadata } from "next";
 import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
@@ -67,7 +68,7 @@ export default function Visit(){
         <p>Iraq Home Expo 2027 welcomes professional visitors to Baghdad International Fair from 12 to 15 May 2027. The exhibition brings suppliers and buyers together across the home, interiors and residential markets, giving you a practical way to compare products and start direct conversations in one visit.</p>
       </div>
       <div className="visitFacts">
-        <div className="visitFact"><span>01</span><small>Date</small><strong>{event.dates}</strong></div>
+        <div className="visitFact"><span>01</span><small>Date</small><strong>12 to 15 May 2027</strong></div>
         <div className="visitFact"><span>02</span><small>Opening hours</small><strong>{event.hours}</strong></div>
         <div className="visitFact"><span>03</span><small>Venue</small><strong>{event.venue}</strong><p>{event.city}</p></div>
       </div>
@@ -81,7 +82,8 @@ export default function Visit(){
       <div className="visitVenueCopy">
         <span className="eyebrow light">Baghdad International Fair</span>
         <h2>A practical venue for a focused business visit.</h2>
-        {venue.description.map((p,i)=><p key={i}>{p}</p>)}
+        <p>Baghdad International Fair is one of Iraq's main exhibition venues, with conference halls, extensive parking, large exhibition floors, central air conditioning and food and beverage facilities suited to a major international trade event.</p>
+        <p>The venue is in a prominent part of Baghdad, close to hotels, shopping destinations and visitor attractions, with convenient access for local and international exhibitors and visitors.</p>
         <Link className="button gold" href="/register/visitor">Register to Visit <span>↗</span></Link>
       </div>
     </section>
@@ -129,7 +131,7 @@ export default function Visit(){
       <div>
         <span className="eyebrow">Join us in Baghdad</span>
         <h2>Plan your visit to Iraq Home Expo 2027.</h2>
-        <p>{event.dates}, {event.venue}</p>
+        <p>12 to 15 May 2027, {event.venue}</p>
       </div>
       <div className="finalCtaActions">
         <Link className="button gold" href="/register/visitor">Register to Visit ↗</Link>
