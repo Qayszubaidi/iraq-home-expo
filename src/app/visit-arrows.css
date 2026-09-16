@@ -1,0 +1,19 @@
+/* Visit sector link spacing fix */
+.visitSectorChips{
+  column-gap:clamp(44px,5vw,84px);
+  row-gap:0;
+}
+.visitSectorChips a{
+  min-width:0;
+  gap:24px;
+  padding:24px 2px;
+}
+.visitSectorChips a span{
+  flex:0 0 auto;
+  margin-left:18px;
+}
+@media(max-width:760px){
+  .visitSectorChips{column-gap:0}
+  .visitSectorChips a{gap:18px}
+  .visitSectorChips a span{margin-left:12px}
+}
