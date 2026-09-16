@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminRest, getSession, signOut, uploadMedia } from "@/lib/cms/adminClient";
 import { pageDefinitions, sectorDefinitions } from "@/lib/cms/adminConfig";
-import { sectors as codeSectors } from "@/data/site";
+import { sectors as codeSectors, categoryDescriptions as codeCategoryDescriptions } from "@/data/site";
 
 import SeoDashboard from "@/components/admin/SeoDashboard";
 type Tab = "overview"|"pages"|"sectors"|"media"|"settings"|"forms"|"leads"|"seo"|"ai";
 type Json = Record<string, any>;
 
 const emptyPage = {eyebrow:"",title:"",copy:"",heroImage:"",heroAlt:"",heroPosition:"center center",primary:"",primaryHref:"",seoTitle:"",seoDescription:""};
-const emptySector = {title:"",short:"",image:"",heroImage:"",categories:[] as string[]};
+const emptySector = {title:"",short:"",intro:[] as string[],image:"",heroImage:"",categories:[] as string[],categoryDescriptions:{} as Record<string,string>};
 
 const pageFallbacks: Record<string, Json> = {
   home: {
@@ -96,7 +96,8 @@ function mergeCmsContent(defaults:Json,...layers:(Json|undefined|null)[]){
 }
 function sectorDefaults(slug:string){
   const s=codeSectors.find(x=>x.slug===slug);
-  return s ? {...emptySector,title:s.title,short:s.short,image:s.image,heroImage:s.heroImage||s.image,categories:[...s.categories]} : {...emptySector};
+  const descriptions=s?Object.fromEntries(s.categories.map(category=>[category,codeCategoryDescriptions[category]||""])):{};
+  return s ? {...emptySector,title:s.title,short:s.short,intro:[...s.intro],image:s.image,heroImage:s.heroImage||s.image,categories:[...s.categories],categoryDescriptions:descriptions} : {...emptySector};
 }
 
 async function getDraft(table:string,keyName:string,key:string){
@@ -328,10 +329,10 @@ function SectorImageControl({
 
 function SectorsEditor({onNotice}:{onNotice:(s:string)=>void}){
  const [slug,setSlug]=useState("interiors"),[form,setForm]=useState<Json>(sectorDefaults("interiors")),[loading,setLoading]=useState(false); const label=sectorDefinitions.find(x=>x[0]===slug)?.[1]||slug;
- async function load(){setLoading(true);try{const [draft,pub]=await Promise.all([getDraft("cms_sector_drafts","slug",slug),getDraft("cms_sectors","slug",slug)]);const fallback=sectorDefaults(slug);const c=mergeCmsContent(fallback,pub?.content,draft?.content);setForm({...c,categories:Array.isArray(c.categories)&&c.categories.length?c.categories:fallback.categories})}catch(e:any){onNotice(e.message)}finally{setLoading(false)}}
- useEffect(()=>{load()},[slug]); const set=(k:string,v:any)=>setForm((f:Json)=>({...f,[k]:v}));
+ async function load(){setLoading(true);try{const [draft,pub]=await Promise.all([getDraft("cms_sector_drafts","slug",slug),getDraft("cms_sectors","slug",slug)]);const fallback=sectorDefaults(slug);const c=mergeCmsContent(fallback,pub?.content,draft?.content);const categories=Array.isArray(c.categories)&&c.categories.length?c.categories:fallback.categories;const intro=Array.isArray(c.intro)&&c.intro.length?c.intro:fallback.intro;const descriptions={...(fallback.categoryDescriptions||{}),...(c.categoryDescriptions||{})};setForm({...c,intro,categories,categoryDescriptions:descriptions})}catch(e:any){onNotice(e.message)}finally{setLoading(false)}}
+ useEffect(()=>{load()},[slug]); const set=(k:string,v:any)=>setForm((f:Json)=>({...f,[k]:v})); const setCategoryDescription=(category:string,value:string)=>setForm((f:Json)=>({...f,categoryDescriptions:{...(f.categoryDescriptions||{}),[category]:value}}));
  async function save(publish=false){try{await saveRow("cms_sector_drafts","slug",slug,label,{content:form});if(publish)await saveRow("cms_sectors","slug",slug,label,{content:form});onNotice(`${label} ${publish?"published":"draft saved"}.`)}catch(e:any){onNotice(e.message)}}
- return <><div className="adminTop"><div><span>Exhibition</span><h1>Sector editor</h1><p>Control card images, sector hero images and sector copy.</p></div><select value={slug} onChange={e=>setSlug(e.target.value)}>{sectorDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<section className="adminCard wide"><Field label="Sector title" value={form.title} onChange={v=>set("title",v)}/><Field label="Short description" multiline value={form.short} onChange={v=>set("short",v)}/><div className="adminSectorImageGrid"><SectorImageControl label="Card cover image" value={form.image} onChange={v=>set("image",v)} onNotice={onNotice} ratio="4 / 5"/><SectorImageControl label="Hero image" value={form.heroImage} onChange={v=>set("heroImage",v)} onNotice={onNotice} ratio="16 / 9"/></div><Field label="Product categories — one per line" multiline value={(form.categories||[]).join("\n")} onChange={v=>set("categories",v.split("\n").map((x:string)=>x.trim()).filter(Boolean))}/><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section>}</>
+ return <><div className="adminTop"><div><span>Exhibition</span><h1>Sector editor</h1><p>Control card images, sector hero images and sector copy.</p></div><select value={slug} onChange={e=>setSlug(e.target.value)}>{sectorDefinitions.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></div>{loading?<div className="adminLoading">Loading…</div>:<section className="adminCard wide"><Field label="Sector title" value={form.title} onChange={v=>set("title",v)}/><Field label="Short description" multiline value={form.short} onChange={v=>set("short",v)}/><Field label="Sector introduction — separate paragraphs with a blank line" multiline value={(form.intro||[]).join("\n\n")} onChange={v=>set("intro",v.split(/\n\s*\n/).map((x:string)=>x.trim()).filter(Boolean))}/><div className="adminSectorImageGrid"><SectorImageControl label="Card cover image" value={form.image} onChange={v=>set("image",v)} onNotice={onNotice} ratio="4 / 5"/><SectorImageControl label="Hero image" value={form.heroImage} onChange={v=>set("heroImage",v)} onNotice={onNotice} ratio="16 / 9"/></div><Field label="Product categories — one per line" multiline value={(form.categories||[]).join("\n")} onChange={v=>set("categories",v.split("\n").map((x:string)=>x.trim()).filter(Boolean))}/><div className="adminCategoryDescriptions"><div className="adminCategoryDescriptionsHead"><span>Category copy</span><h3>Product category descriptions</h3><p>Descriptions are stored separately from the category-name list, so categories remain compatible with the CMS editor and structured data.</p></div><div className="adminCategoryDescriptionGrid">{(form.categories||[]).map((category:string,i:number)=><label className="adminCategoryDescriptionItem" key={category}><div><span>{String(i+1).padStart(2,"0")}</span><strong>{category}</strong></div><textarea value={form.categoryDescriptions?.[category]||""} onChange={e=>setCategoryDescription(category,e.target.value)} placeholder={`Description for ${category}`}/></label>)}</div></div><div className="adminActions"><button onClick={()=>save(false)}>Save Draft</button><button className="primary" onClick={()=>save(true)}>Publish</button></div></section>}</>
 }
 
 function MediaLibrary({onNotice}:{onNotice:(s:string)=>void}){
