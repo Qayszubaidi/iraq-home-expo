@@ -14,9 +14,11 @@ export type CmsPageContent = {
 export type CmsSectorContent = {
   title?: string;
   short?: string;
+  intro?: string[];
   image?: string;
   heroImage?: string;
   categories?: string[];
+  categoryDescriptions?: Record<string,string>;
 };
 
 export type PublicSiteSettings = {
