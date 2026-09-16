@@ -69,7 +69,7 @@ export default function Visit(){
       </div>
       <div className="visitFacts">
         <div className="visitFact"><span>01</span><small>Date</small><strong>12 to 15 May 2027</strong></div>
-        <div className="visitFact"><span>02</span><small>Opening hours</small><strong>{event.hours}</strong></div>
+        <div className="visitFact"><span>02</span><small>Opening hours</small><strong>11:00 AM to 6:00 PM</strong></div>
         <div className="visitFact"><span>03</span><small>Venue</small><strong>{event.venue}</strong><p>{event.city}</p></div>
       </div>
     </section>
