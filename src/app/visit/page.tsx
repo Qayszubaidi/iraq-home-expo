@@ -1,4 +1,5 @@
 import "../visit-about.css";
+import "../visit-arrows.css";
 import SeoJsonLd from "@/components/SeoJsonLd";
 import type { Metadata } from "next";
 import SeoBreadcrumbs from "@/components/SeoBreadcrumbs";
