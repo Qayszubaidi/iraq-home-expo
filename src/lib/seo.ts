@@ -1,5 +1,5 @@
 export const SITE_URL = "https://iraqhomeexpo.com";
-export const SITE_NAME = "Iraq Home Expo";
+export const SITE_NAME = "Iraq Home Expo 2027";
 
 export const iraqEntity = {
   "@type":"Country",
@@ -23,8 +23,9 @@ export const organizationJsonLd = {
   "@context":"https://schema.org",
   "@type":"Organization",
   "@id":`${SITE_URL}/#organization`,
-  name:"Iraq Home Expo",
-  url:SITE_URL,
+  name:SITE_NAME,
+  alternateName:["Iraq Home Expo","IHI EXPO"],
+  url:`${SITE_URL}/`,
   logo:{
     "@type":"ImageObject",
     url:`${SITE_URL}/assets/iraq-home-expo-logo.png`,
@@ -43,8 +44,8 @@ export const websiteJsonLd = {
   "@type":"WebSite",
   "@id":`${SITE_URL}/#website`,
   name:SITE_NAME,
-  alternateName:["Iraq Home Expo 2027","Iraq Expo","iraqhomeexpo.com"],
-  url:SITE_URL,
+  alternateName:["Iraq Home Expo","IHI EXPO","iraqhomeexpo.com"],
+  url:`${SITE_URL}/`,
   publisher:{"@id":`${SITE_URL}/#organization`},
   inLanguage:"en"
 };
@@ -55,7 +56,7 @@ export const eventJsonLd = {
   "@id":`${SITE_URL}/#event`,
   name:"Iraq Home Expo 2027",
   alternateName:["Iraq Home Expo","Iraq Furniture & Interiors Expo"],
-  description:"International exhibition for furniture, interiors, home products and residential solutions, 12–15 May 2027 at Baghdad International Fair in Baghdad, Iraq.",
+  description:"International exhibition for furniture, interiors, home products and residential solutions from 12 to 15 May 2027 at Baghdad International Fair in Baghdad, Iraq.",
   url:SITE_URL,
   startDate:"2027-05-12T11:00:00+03:00",
   endDate:"2027-05-15T18:00:00+03:00",
@@ -126,14 +127,19 @@ export function pageJsonLd({
       {"@id":`${SITE_URL}/#baghdad-international-fair`},
       ...mentions
     ],
-    keywords:[
+    keywords:Array.from(new Set([
+      "Iraq Home Expo 2027",
       "Iraq Home Expo",
-      "Iraq Expo",
       "Iraq International Expo",
+      "Baghdad International Expo",
       "Iraq International Fair",
       "Baghdad International Fair",
+      "Iraq Expo",
+      "Baghdad Expo",
+      "Iraq Fair",
+      "Baghdad Fair",
       ...keywords
-    ].join(", "),
+    ])).join(", "),
     inLanguage:"en",
     publisher:{"@id":`${SITE_URL}/#organization`}
   };

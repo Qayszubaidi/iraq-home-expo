@@ -26,7 +26,7 @@ export default async function CmsHomeHero() {
     />
     <div className="heroGradient"/><div className="heroPattern" aria-hidden="true"/>
     <div className="heroContent"><MaskReveal>
-      <div className="heroLabels"><span className="archLabel">{dates}</span><span className="archLabel">{city}</span></div>
+      <div className="heroLabels"><span className="archLabel heroBrandLabel">Iraq Home Expo 2027</span><span className="archLabel">{dates}</span><span className="archLabel">{city}</span></div>
       <h1 className="heroTitle"><span className="heroTitleLine">{title}</span></h1>
       <p className="heroLead">{copy}</p>
       <div className="actions"><Link className="button gold" href={cms?.primaryHref || "/register/visitor"}>{cms?.primary || "Visit the Expo"} <span aria-hidden="true">→</span></Link><Link className="button ghost" href="/exhibit">Exhibit with Us <span aria-hidden="true">→</span></Link></div>

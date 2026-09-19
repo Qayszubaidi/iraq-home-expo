@@ -10,10 +10,10 @@ export default function Footer({cmsSettings}:{cmsSettings?:PublicSiteSettings|nu
   <div className="v4FooterGrid">
     <section className="v4FooterBrand">
       <Link href="/" className="v4FooterLogo"><Image src="/assets/iraq-home-expo-logo-white.png" width={309} height={90} sizes="220px" alt="Iraq Home Expo 2027 official logo"/></Link>
-      <p>Iraq Home Expo brings the home, interiors and residential industry together in Baghdad.</p>
+      <p>Iraq Home Expo 2027 brings furniture, interiors and home product companies together with professional buyers in Baghdad.</p>
       <div className="v4FooterSocial"><a href={site.facebook} target="_blank" rel="noreferrer" aria-label="Facebook"><Social kind="facebook"/></a><a href={site.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Social kind="instagram"/></a></div>
     </section>
-    <section className="v4FooterCol"><h3>Quick Links</h3><Link href="/about">About</Link><Link href="/sectors">Sectors</Link><Link href="/why-iraq">Why Iraq</Link><Link href="/visit">Visit</Link><Link href="/exhibit">Exhibit</Link><Link href="/sponsor">Sponsor</Link><Link href="/contact">Contact</Link></section>
+    <section className="v4FooterCol"><h3>Quick Links</h3><Link href="/about">About Iraq Home Expo</Link><Link href="/sectors">Exhibition Sectors</Link><Link href="/why-iraq">Why Iraq</Link><Link href="/visit">Visit Iraq Home Expo</Link><Link href="/exhibit">Exhibit at Iraq Home Expo</Link><Link href="/sponsor">Sponsorship</Link><Link href="/contact">Contact Iraq Home Expo</Link></section>
     <section className="v4FooterCol"><h3>Exhibition Sectors</h3>{sectors.slice(0,6).map(s=><Link href={`/sectors/${s.slug}`} key={s.slug}>{s.title}</Link>)}</section>
     <section className="v4FooterContact"><h3>Contact & Location</h3><div className="v4EventCard"><span>Event</span><strong>{site.dates}</strong><small>{site.venue}<br/>{site.city}</small></div><a href={`mailto:${site.infoEmail}`}>{site.infoEmail}</a><a href={`mailto:${site.salesEmail}`}>{site.salesEmail}</a><a href={`tel:${site.phone1.replace(/\s/g,"")}`}>{site.phone1}</a><a href={`tel:${site.phone2.replace(/\s/g,"")}`}>{site.phone2}</a></section>
   </div>

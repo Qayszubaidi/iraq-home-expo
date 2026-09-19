@@ -24,10 +24,12 @@ const display = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://iraqhomeexpo.com"),
+  applicationName: "Iraq Home Expo 2027",
   title: { default: "Iraq Home Expo 2027", template: "%s | Iraq Home Expo 2027" },
   description:
-    "Iraq Home Expo 2027 — 12–15 May 2027 at Baghdad International Fair, Baghdad, Iraq.",
+    "Iraq Home Expo 2027 takes place from 12 to 15 May 2027 at Baghdad International Fair in Baghdad, Iraq.",
   openGraph: {
+    siteName: "Iraq Home Expo 2027",
     title: "Iraq Home Expo 2027",
     description: "Meet the home, interiors and residential market in Baghdad.",
     type: "website",
