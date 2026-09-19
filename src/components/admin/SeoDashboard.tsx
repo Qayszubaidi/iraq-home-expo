@@ -1,7 +1,9 @@
 "use client";
 
 import {useEffect,useMemo,useState} from "react";
-import {getAdminAccessToken} from "@/lib/cms/adminClient";
+import {adminRest,getAdminAccessToken} from "@/lib/cms/adminClient";
+import {SEO_WORKPLAN,SEO_WORKPLAN_INITIAL_COMPLETED} from "@/data/seoWorkplan";
+import styles from "./SeoWorkplan.module.css";
 
 type AuditPage={
   path:string;status:number;score:number;title?:string;description?:string;canonical?:string;h1Count?:number;schemaCount?:number;imageCount?:number;missingAlt?:number;emptyAlt?:number;genericAlt?:number;internalLinks?:number;checks?:Record<string,boolean>;error?:string;
@@ -31,6 +33,11 @@ export default function SeoDashboard(){
   const [gscBusy,setGscBusy]=useState(false);
   const [error,setError]=useState("");
   const [gscError,setGscError]=useState("");
+  const [workplan,setWorkplan]=useState<Record<string,boolean>>(SEO_WORKPLAN_INITIAL_COMPLETED);
+  const [activeMonth,setActiveMonth]=useState("month-1");
+  const [workplanBusy,setWorkplanBusy]=useState(true);
+  const [workplanSaving,setWorkplanSaving]=useState(false);
+  const [workplanError,setWorkplanError]=useState("");
 
   async function authHeaders(){
     const accessToken=await getAdminAccessToken();
@@ -78,7 +85,32 @@ export default function SeoDashboard(){
     }catch(e:any){setGscError(e?.message||"Unable to disconnect Search Console.")}finally{setGscBusy(false)}
   }
 
-  useEffect(()=>{run();loadGsc()},[]);
+  async function loadWorkplan(){
+    setWorkplanBusy(true);setWorkplanError("");
+    try{
+      const rows=await adminRest<{value?:{completed?:Record<string,boolean>}}[]>("cms_private_settings?key=eq.seo-workplan-progress&select=value");
+      const saved=rows?.[0]?.value?.completed||{};
+      setWorkplan({...SEO_WORKPLAN_INITIAL_COMPLETED,...saved});
+    }catch(e:any){setWorkplanError(e?.message||"Unable to load SEO work plan.")}finally{setWorkplanBusy(false)}
+  }
+
+  async function saveWorkplan(next:Record<string,boolean>){
+    const previous=workplan;
+    setWorkplan(next);setWorkplanSaving(true);setWorkplanError("");
+    try{
+      await adminRest("cms_private_settings?key=eq.seo-workplan-progress",{
+        method:"PATCH",
+        body:JSON.stringify({value:{completed:next,updatedAt:new Date().toISOString()},updated_at:new Date().toISOString()}),
+      });
+    }catch(e:any){setWorkplan(previous);setWorkplanError(e?.message||"Unable to save SEO work plan.")}finally{setWorkplanSaving(false)}
+  }
+
+  function toggleWorkplanTask(id:string){
+    if(workplanSaving) return;
+    void saveWorkplan({...workplan,[id]:!workplan[id]});
+  }
+
+  useEffect(()=>{run();loadGsc();loadWorkplan()},[]);
 
   const totals=useMemo(()=>{
     const pages=audit?.pages||[];
@@ -91,6 +123,12 @@ export default function SeoDashboard(){
   },[audit]);
 
   const topQueries=(gsc?.queries||[]).slice(0,10);
+  const allWorkplanTasks=SEO_WORKPLAN.flatMap(month=>month.tasks);
+  const workplanDone=allWorkplanTasks.filter(task=>workplan[task.id]).length;
+  const workplanPercent=allWorkplanTasks.length?Math.round((workplanDone/allWorkplanTasks.length)*100):0;
+  const selectedMonth=SEO_WORKPLAN.find(month=>month.id===activeMonth)||SEO_WORKPLAN[0];
+  const selectedDone=selectedMonth.tasks.filter(task=>workplan[task.id]).length;
+  const selectedPercent=selectedMonth.tasks.length?Math.round((selectedDone/selectedMonth.tasks.length)*100):0;
 
   return <>
     <div className="adminTop seoAdminTop">
@@ -100,6 +138,7 @@ export default function SeoDashboard(){
 
     {error&&<div className="adminNotice">{error}</div>}
     {gscError&&<div className="adminNotice">{gscError}</div>}
+    {workplanError&&<div className="adminNotice">{workplanError}</div>}
 
     <div className="seoMetricGrid">
       <article><span>Site SEO score</span><strong>{audit?<>{audit.averageScore}<small>/100</small></>:"—"}</strong><p>Average of live page checks.</p></article>
@@ -107,6 +146,43 @@ export default function SeoDashboard(){
       <article><span>Image SEO issues</span><strong>{audit?totals.missingAlt:"—"}</strong><p>Images missing usable alt text.</p></article>
       <article><span>Schema gaps</span><strong>{audit?totals.schemaMissing:"—"}</strong><p>Public pages without JSON-LD.</p></article>
     </div>
+
+    <section className={`adminCard wide ${styles.workplanCard}`}>
+      <div className="seoSectionHead">
+        <div><span>6 month execution plan</span><h2>SEO work checklist</h2><p className={styles.planIntro}>Track the approved September 2026 through February 2027 SEO roadmap. Check an item only when the work is complete.</p></div>
+        <div className={styles.overallProgress}><strong>{workplanPercent}%</strong><span>{workplanDone} of {allWorkplanTasks.length} complete</span></div>
+      </div>
+
+      <div className={styles.progressTrack} aria-label={`Overall SEO work plan progress ${workplanPercent}%`}><i style={{width:`${workplanPercent}%`}}/></div>
+
+      <div className={styles.monthTabs}>
+        {SEO_WORKPLAN.map(month=>{
+          const done=month.tasks.filter(task=>workplan[task.id]).length;
+          const percent=month.tasks.length?Math.round((done/month.tasks.length)*100):0;
+          return <button key={month.id} type="button" className={activeMonth===month.id?styles.activeMonth:""} onClick={()=>setActiveMonth(month.id)}>
+            <span>Month {month.month}{month.month===1?<b>Current</b>:null}</span>
+            <strong>{month.title}</strong>
+            <small>{month.period} · {percent}%</small>
+          </button>;
+        })}
+      </div>
+
+      <div className={styles.monthPanel}>
+        <div className={styles.monthHead}>
+          <div><span>Month {selectedMonth.month} · {selectedMonth.period}</span><h3>{selectedMonth.title}</h3><p>{selectedMonth.outcome}</p></div>
+          <div><strong>{selectedPercent}%</strong><small>{selectedDone} of {selectedMonth.tasks.length}</small></div>
+        </div>
+        <div className={styles.monthProgress}><i style={{width:`${selectedPercent}%`}}/></div>
+        <div className={styles.taskGrid} aria-busy={workplanBusy||workplanSaving}>
+          {selectedMonth.tasks.map(task=><label key={task.id} className={workplan[task.id]?styles.taskDone:""}>
+            <input type="checkbox" checked={!!workplan[task.id]} disabled={workplanBusy||workplanSaving} onChange={()=>toggleWorkplanTask(task.id)}/>
+            <span className={styles.checkMark} aria-hidden="true">{workplan[task.id]?"✓":""}</span>
+            <strong>{task.label}</strong>
+          </label>)}
+        </div>
+        <div className={styles.saveState}>{workplanBusy?"Loading checklist…":workplanSaving?"Saving…":"Progress saved automatically"}</div>
+      </div>
+    </section>
 
     <section className="adminCard wide seoIntegrationCard">
       <div className="seoSectionHead">
